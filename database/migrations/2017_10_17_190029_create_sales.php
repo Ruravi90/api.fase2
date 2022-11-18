@@ -35,8 +35,8 @@ class CreateSales extends Migration
     public function down()
     {
          Schema::table('sales',function(Blueprint $table){
-             $table->dropForeign(['client_id']);
-             $table->dropForeign(['user_id']);
+             //$table->dropForeign('sales_client_id_foreign');
+             //$table->dropForeign('user_id');
         });
 
         Schema::dropIfExists('sales');

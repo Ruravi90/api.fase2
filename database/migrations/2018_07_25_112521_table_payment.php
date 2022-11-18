@@ -29,7 +29,8 @@ class TablePayment extends Migration
     public function down()
     {
         Schema::table('payments',function(Blueprint $table){
-             $table->dropForeign(['responsible_id','type_sale_id']);
+            $table->dropForeign('payments_responsible_id_foreign');
+            $table->dropForeign('payments_type_sale_id_foreign');
              $table->dropColumn(['responsible_id','type_sale_id']);
         });
     }

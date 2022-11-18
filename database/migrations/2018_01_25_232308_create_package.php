@@ -51,13 +51,16 @@ class CreatePackage extends Migration
     public function down()
     {
         Schema::table('package_tracking',function(Blueprint $table){
-             $table->dropForeign(['package_id','user_id']);
+             $table->dropForeign('package_tracking_package_id_foreign');
+             $table->dropForeign('package_tracking_user_id_foreign');
         });
 
         Schema::dropIfExists('package_tracking');
 
         Schema::table('packages',function(Blueprint $table){
-             $table->dropForeign(['sale_id','client_id','cat_package_id']);
+             $table->dropForeign('packages_sale_id_foreign');
+             $table->dropForeign('packages_client_id_foreign');
+             $table->dropForeign('packages_cat_package_id_foreign');
         });
 
         Schema::dropIfExists('packages');

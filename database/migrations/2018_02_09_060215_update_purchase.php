@@ -53,7 +53,9 @@ class UpdatePurchase extends Migration
         Schema::dropIfExists('products');
 
         Schema::table('purchases', function (Blueprint $table) {
-            $table->dropForeign(['credito_id','provider_id'.'purchase_id']);
+            $table->dropForeign('purchases_credito_id_foreign');
+            $table->dropForeign('purchases_provider_id_foreign');
+            $table->dropForeign('purchases_purchase_id_foreign');
             $table->dropColumn(['credito_id','provider_id','purchase_id']);
         });
     }

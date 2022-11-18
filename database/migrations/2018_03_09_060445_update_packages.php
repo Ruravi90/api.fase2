@@ -36,12 +36,13 @@ class UpdatePackages extends Migration
     public function down()
     {
         Schema::table('sales', function (Blueprint $table) {
-            $table->dropForeign(['responsible_id']);
-            $table->dropColumn(['responsible_id']);
+            $table->dropForeign('sales_user_id_foreign');
+            $table->dropColumn(['user_id']);
         });
 
         Schema::table('cat_packages', function (Blueprint $table) {
-            $table->dropForeign(['product_id','pill_id']);
+            $table->dropForeign('cat_packages_pill_id_foreign');
+            $table->dropForeign('cat_packages_product_id_foreign');
             $table->dropColumn(['product_id','product_count','pill_id','pill_count']);
         });
     }
