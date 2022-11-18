@@ -1,28 +1,31 @@
 <?php
 
-namespace fase2\Http\Controllers;
-use fase2\User;
-use Caffeinated\Shinobi\Models\Role;
-use Caffeinated\Shinobi\Models\RoleUser;
-use Caffeinated\Shinobi\Models\Permission; 
-use Illuminate\Support\Facades\Auth; 
-use fase2\Utilities;
-use fase2\Mail\NewUser;
-use fase2\Http\Controllers\Controller;
+namespace App\Http\Controllers;
+
+use App\Models\User;
+use App\Models\Role;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Mail;
 
 class UserController extends Controller
 {
 
-    public function index()
-    {
-        return view('user.index');
-    }
-
-    // Api rest
-
+    /**
+     * @OA\Post(
+     *     path="/api/users/paginate",
+     *     tags={"users"},
+     *     summary="Get users per paginate",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Valida existencia de usuario."
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="Ha ocurrido un error."
+     *     )
+     * )
+     */
     public function getPaginate(Request $request) {
 		//per_page
 		$perPage = 15;
@@ -46,6 +49,22 @@ class UserController extends Controller
            return  response()->json(['status' => false]);
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/users",
+     *     tags={"users"},
+     *     summary="Add user",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Valida existencia de usuario."
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="Ha ocurrido un error."
+     *     )
+     * )
+     */
 	public function add(Request $request){
         $user = new User;
         $user->username = $request->get('username');
@@ -54,13 +73,7 @@ class UserController extends Controller
         $user->motherlastname = $request->has('motherlastname') ? $request->get('motherlastname') : '';
         $user->email = 'usuario@fase2spa.com.mx';
         $user->initials = $request->get('initials');
-
-
-        $utilities =new Utilities();
-        //$password = $utilities->generate_password();
-
         $user->password = bcrypt($user->username.'1');
-
         $user->save();
 
         foreach ($request->input("roles") as $key => $value) {
@@ -69,19 +82,34 @@ class UserController extends Controller
 
         $user->save();
 
-        //$user->password =  $password;
-        //try{
-        //    Mail::to($user->email)->send(new NewUser($user));
-        //} catch (Exception $ex) {
-        //    dd($ex);
-        //}
-        
 		return response()->json([
             'password' =>  $user->username.'1'
         ]);
 	}
 
-    public function update($id,Request $request){// se envia el id a $client 
+    /**
+     * @OA\Put(
+     *     path="/api/users/{id}",
+     *     tags={"users"},
+     *     summary="Update user",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Parameter(
+     *        name="id",
+     *        in="query",
+     *        description="",
+     *        required=true,
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Valida existencia de usuario."
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="Ha ocurrido un error."
+     *     )
+     * )
+     */
+    public function update($id,Request $request){// se envia el id a $client
 		$user = User::find($id);
 		$user->username = $request->get('username');
 		$user->name = $request->get('name');
@@ -89,91 +117,196 @@ class UserController extends Controller
 		$user->motherlastname = $request->has('motherlastname') ? $request->get('motherlastname') : '';
         //$user->email = $request->get('email');
         $user->initials = $request->get('initials');
-    
+
         if($request->has('reset_password')){
               $user->password = bcrypt($request->get('reset_password'));
         }
 
-        $user->revokeAllRoles();
+        $user->roles()->sync([]);
 		$user->save();
         foreach ($request->input("roles") as $key => $value) {
            $user->assignRole($value["id"]);
         }
         $user->save();
-    	return ['success' => true]; 
+    	return ['success' => true];
     }
 
+    /**
+     * @OA\Delete(
+     *     path="/api/users/{id}",
+     *     tags={"users"},
+     *     summary="Delete user",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Parameter(
+     *        name="id",
+     *        in="query",
+     *        description="",
+     *        required=true,
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Valida existencia de usuario."
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="Ha ocurrido un error."
+     *     )
+     * )
+     */
     public function delete($id){
     	$user = User::find($id);
 		$user->delete();
-    	return ['success' => true]; 
+    	return ['success' => true];
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/users",
+     *     tags={"users"},
+     *     summary="Get users",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Valida existencia de usuario."
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="Ha ocurrido un error."
+     *     )
+     * )
+     */
     public function getAll(){
-        $role = Role::where('slug','agent')->get()->first();
-        $roleUser = RoleUser::where('role_id',$role->id)->select('user_id')->get();
-        $user = User::whereNotIn('id',$roleUser)->get();
-        return response($user, 200)->header('Content-Type', 'application/json');
+        //$role = Role::where('slug','agent')->get()->first();
+        //$roleUser = RoleUser::where('role_id',$role->id)->select('user_id')->get();
+        //$user = User::whereNotIn('id',$roleUser)->get();
+        return response( 200)->header('Content-Type', 'application/json');
     }
 
+
+    /**
+     * @OA\Get(
+     *     path="/api/users/{id}",
+     *     tags={"users"},
+     *     summary="Get user",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Parameter(
+     *        name="id",
+     *        in="query",
+     *        description="",
+     *        required=true,
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Valida existencia de usuario."
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="Ha ocurrido un error."
+     *     )
+     * )
+     */
     public function find($id){
         $user = User::with('roles')->find($id);
         return response($user, 200)->header('Content-Type', 'application/json');
     }
 
-    public function login(Request $request){// se envia el id a $client 
+
+    public function login(Request $request){// se envia el id a $client
 		$user = User::where('username', $request->get('username'));
 		$user->username = $request->get('username');
 		$user->name = $request->get('name');
 		$user->lastname = $request->get('lastname');
-        $user = User::with('roles')->find($id);
-        return response($user, 200)->header('Content-Type', 'application/json');
+        //$user = User::with('roles')->find($id);
+        return response(200)->header('Content-Type', 'application/json');
     }
 
-    /** 
-     * Login api 
-     * POST /api/users/login
-     * @param string username
-     * @param string password
-     * @return Response
-     */ 
-    public function apiLogin(Request $request){ 
-        
-        if(Auth::attempt(['username' => $request['username'], 'password' => $request['password']])){ 
-            $user = User::with('roles')->find(Auth::user()->id); 
-            $user->token =  $user->createToken('fase2spa')->accessToken; 
-            return response()->json(['success' => $user], 200); 
-        } 
-        else{ 
-            return response()->json(['error'=>'Unauthorised'], 401); 
-        } 
-    }
-    /** 
-     * Register api 
-     * POST /api/users/register
-     * @param string name
-     * @param string email
-     * @param string username
-     * @param string password
-     * @param string c_password
-     * @return Response
-     */ 
-    public function apiRegister(Request $request) 
-    { 
-        $validator = Validator::make($request->all(), [ 
-            'name' => 'required', 
-            'email' => 'required|email', 
-            'password' => 'required', 
-            'c_password' => 'required|same:password', 
-        ]);
-        if ($validator->fails()) { 
-            return response()->json(['error'=>$validator->errors()], 401);            
+
+
+    /**
+     * @OA\Post(
+     *     path="/api/auth/login",
+     *     tags={"auth"},
+     *     summary="Inicio de sesion",
+    *     @OA\RequestBody(
+    *         @OA\MediaType(
+    *             mediaType="application/json",
+    *             @OA\Schema(
+    *                 @OA\Property(
+    *                     property="username",
+    *                     type="string"
+    *                 ),
+    *                 @OA\Property(
+    *                     property="password",
+    *                     type="string"
+    *                 ),
+    *                 example={"username": "user", "password": "123"}
+    *             )
+    *         )
+    *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Valida existencia de usuario."
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="Ha ocurrido un error."
+     *     )
+     * )
+     */
+    public function apiLogin(Request $request){
+
+        $credentials = $request->only('username', 'password');
+        $token = \Tymon\JWTAuth\Facades\JWTAuth::attempt($credentials);
+
+        if(!$token){
+            return response([
+                'status' => 'error',
+                'message' => 'Unauthorized',
+            ],401)->header('Content-Type', 'application/json');
         }
-        $input = $request->all(); 
-        $input['password'] = bcrypt($input['password']); 
-        $user = User::create($input); 
-        $success['token'] =  $user->createToken('fase2spa')->accessToken; 
-        $success['name'] =  $user->name;
-        return response()->json(['success'=>$success], 200); 
+
+        return response([
+                'token' => $token,
+                'type' => 'bearer',
+            ])->header('Content-Type', 'application/json');
+    }
+
+    /**
+     * Display a listing of the resource.
+     * Mostramos el listado de los regitros solicitados.
+     * @return \Illuminate\Http\Response
+     *
+     * @OA\Post(
+     *     path="/api/auth/register",
+     *     tags={"auth"},
+     *     summary="Registra usuario",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Valida existencia de usuario."
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="Ha ocurrido un error."
+     *     )
+     * )
+     */
+    public function apiRegister(Request $request)
+    {
+        $request->validate($request->all(), [
+            'name' => 'required',
+            'username' => 'required',
+            'password' => 'required|min:6|confirmed',
+        ]);
+
+        $input = $request->all();
+        $input['password'] = bcrypt($input['password']);
+        $user = User::create($input);
+        $token = \Tymon\JWTAuth\Facades\JWTAuth::fromUser($user);
+
+        return response([
+            'token' => $token,
+            'type' => 'bearer',
+        ])->header('Content-Type', 'application/json');
+
     }
 }

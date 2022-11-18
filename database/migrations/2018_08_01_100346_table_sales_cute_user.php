@@ -14,8 +14,8 @@ class TableSalesCuteUser extends Migration
     public function up()
     {
         Schema::table('sales',function(Blueprint $table){
-            $table->integer('cute_user_id')->nullable()->unsigned();
-            $table->foreign('cute_user_id')->references('id')->on('users');
+            //$table->integer('cute_user_id')->nullable()->unsigned();
+            $table->foreignId('cute_user_id')->nullable()->references('id')->on('users');
             $table->boolean('is_cute')->default(false);
        });
     }

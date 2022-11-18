@@ -1,8 +1,32 @@
 <?php
 
-//use Illuminate\Http\Request;
-//use fase2\Events\TasksPusherEvent;
-//use fase2\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ProviderController;
+use App\Http\Controllers\CreditorController;
+use App\Http\Controllers\AgentController;
+use App\Http\Controllers\CatReferenceController;
+use App\Http\Controllers\CatPackageController;
+use App\Http\Controllers\CatProductController;
+use App\Http\Controllers\CatPillController;
+use App\Http\Controllers\CatServiceController;
+use App\Http\Controllers\CatTypeSalesController;
+use App\Http\Controllers\CatExpensesController;
+use App\Http\Controllers\CatConceptController;
+use App\Http\Controllers\SaleController;
+use App\Http\Controllers\SaleAdditionalController;
+use App\Http\Controllers\ProductInventoryController;
+use App\Http\Controllers\PillInventoryController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\PackageController;
+use App\Http\Controllers\PackageTrackingController;
+use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\BoxController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,196 +38,222 @@
 |
 */
 
-Route::group(['middleware' => 'guest'], function(){
-    Route::post('/users/login', 'UserController@apiLogin');
-    Route::post('/users/register', 'UserController@apiRegister');
-
-    Route::get('/queue', 'QueueController@index');
-    
+Route::controller(UserController::class)->group(function(){
+    Route::post('/auth/register', 'apiRegister');
+    Route::post('/auth/login', 'apiLogin');
 });
 
-Route::group(['middleware' => 'auth:api'], function ($router) {//
-    Route::get('/schedules', 'ScheduleController@getAll');
-    Route::get('/schedules/{id}', 'ScheduleController@find');
-    Route::post('/schedules', 'ScheduleController@add');
-    Route::put('/schedules/{id}', 'ScheduleController@update');
-    Route::delete('/schedules/{id}', 'ScheduleController@delete');
+//Route::get('/queue', 'QueueController@index');
 
-    Route::get('/clients', 'ClientController@getAll');
-    Route::get('/clients/{id}', 'ClientController@find');
-    Route::post('/clients', 'ClientController@add');
-    Route::post('/clients/paginate', 'ClientController@getPaginate');
-    Route::put('/clients/{id}', 'ClientController@update');
-    Route::delete('/clients/{id}', 'ClientController@delete');
+Route::group(['middleware' => 'jwt.verify'], function ($router) {//
 
-    Route::get('/providers', 'ProviderController@getAll');
-    Route::get('/providers/{id}', 'ProviderController@find');
-    Route::post('/providers', 'ProviderController@add');
-    Route::put('/providers/{id}', 'ProviderController@update');
-    Route::delete('/providers/{id}', 'ProviderController@delete');
+    Route::controller(ScheduleController::class)->group(function () {
+        Route::get('/schedules', 'getAll');
+        Route::get('/schedules/{id}', 'find');
+        Route::post('/schedules', 'add');
+        Route::put('/schedules/{id}', 'update');
+        Route::delete('/schedules/{id}', 'delete');
+    });
 
-    Route::get('/creditors', 'CreditorController@getAll');
-    Route::get('/creditors/{id}', 'CreditorController@find');
-    Route::post('/creditors', 'CreditorController@add');
-    Route::put('/creditors/{id}', 'CreditorController@update');
-    Route::delete('/creditors/{id}', 'CreditorController@delete');
+    Route::controller(ClientController::class)->group(function () {
+        Route::get('/clients', 'getAll');
+        Route::get('/clients/{id}', 'find');
+        Route::post('/clients', 'add');
+        Route::post('/clients/paginate', 'getPaginate');
+        Route::put('/clients/{id}', 'update');
+        Route::delete('/clients/{id}', 'delete');
+    });
 
-    Route::get('/users', 'UserController@getAll');
-    Route::get('/users/{id}', 'UserController@find');
-    Route::post('/users/paginate', 'UserController@getPaginate');
-    Route::post('/users/exist_user', 'UserController@existUsername');
-    Route::post('/users', 'UserController@add');
-    Route::put('/users/{id}', 'UserController@update');
-    Route::delete('/users/{id}', 'UserController@delete');
+    Route::controller(ProviderController::class)->group(function () {
+        Route::get('/providers', 'getAll');
+        Route::get('/providers/{id}', 'find');
+        Route::post('/providers', 'add');
+        Route::put('/providers/{id}', 'update');
+        Route::delete('/providers/{id}', 'delete');
+    });
 
-    Route::get('/agents', 'AgentController@getAll');
-    Route::get('/agents/{id}', 'AgentController@find');
-    Route::post('/agents/exist_user', 'AgentController@existUsername');
-    Route::post('/agents', 'AgentController@add');
-    Route::put('/agents/{id}', 'AgentController@update');
-    Route::delete('/agents/{id}', 'AgentController@delete');
+    Route::controller(CreditorController::class)->group(function () {
+        Route::get('/creditors', 'getAll');
+        Route::get('/creditors/{id}', 'find');
+        Route::post('/creditors', 'add');
+        Route::put('/creditors/{id}', 'update');
+        Route::delete('/creditors/{id}', 'delete');
+    });
 
-    Route::get('/roles', 'RolController@getAll');
-    Route::get('/roles/{id}', 'RolController@find');
-    Route::post('/roles', 'RolController@add');
-    Route::put('/roles/{id}', 'RolController@update');
-    Route::delete('/roles/{id}', 'RolController@delete');
+    Route::controller(UserController::class)->group(function () {
+        Route::get('/users', 'getAll');
+        Route::get('/users/{id}', 'find');
+        Route::post('/users/paginate', 'getPaginate');
+        Route::post('/users/exist_user', 'existUsername');
+        Route::post('/users', 'add');
+        Route::put('/users/{id}', 'update');
+        Route::delete('/users/{id}', 'delete');
+    });
 
-    Route::get('/permissions', 'PermissionController@getAll');
-    Route::get('/permissions/{id}', 'PermissionController@find');
-    Route::post('/permissions', 'PermissionController@add');
-    Route::put('/permissions/{id}', 'PermissionController@update');
-    Route::delete('/permissions/{id}', 'PermissionController@delete');
+    Route::controller(AgentController::class)->group(function () {
+        Route::get('/agents', 'getAll');
+        Route::get('/agents/{id}', 'find');
+        Route::post('/agents/exist_user', 'existUsername');
+        Route::post('/agents', 'add');
+        Route::put('/agents/{id}', 'update');
+        Route::delete('/agents/{id}', 'delete');
+    });
 
-    Route::get('/cat_references', 'CatReferenceController@getAll');
-    Route::get('/cat_references/{id}', 'CatReferenceController@find');
-    Route::post('/cat_references', 'CatReferenceController@add');
-    Route::post('/cat_references/paginate', 'CatReferenceController@getPaginate');
-    Route::put('/cat_references/{id}', 'CatReferenceController@update');
-    Route::delete('/cat_references/{id}', 'CatReferenceController@delete');
+    Route::controller(CatReferenceController::class)->group(function () {
+        Route::get('/cat_references', 'getAll');
+        Route::get('/cat_references/{id}', 'find');
+        Route::post('/cat_references', 'add');
+        Route::post('/cat_references/paginate', 'getPaginate');
+        Route::put('/cat_references/{id}', 'update');
+        Route::delete('/cat_references/{id}', 'delete');
+    });
 
-    Route::get('/cat_packages', 'CatPackageController@getAll');
-    Route::get('/cat_packages/{id}', 'CatPackageController@find');
-    Route::post('/cat_packages', 'CatPackageController@add');
-    Route::post('/cat_packages/paginate', 'CatPackageController@getPaginate');
-    Route::put('/cat_packages/{id}', 'CatPackageController@update');
-    Route::delete('/cat_packages/{id}', 'CatPackageController@delete');
+    Route::controller(CatPackageController::class)->group(function () {
+        Route::get('/cat_packages', 'getAll');
+        Route::get('/cat_packages/{id}', 'find');
+        Route::post('/cat_packages', 'add');
+        Route::post('/cat_packages/paginate', 'getPaginate');
+        Route::put('/cat_packages/{id}', 'update');
+        Route::delete('/cat_packages/{id}', 'delete');
+    });
 
-    Route::get('/cat_products', 'CatProductController@getAll');
-    Route::get('/cat_products/{id}', 'CatProductController@find');
-    Route::post('/cat_products', 'CatProductController@add');
-    Route::post('/cat_products/paginate', 'CatProductController@getPaginate');
-    Route::put('/cat_products/{id}', 'CatProductController@update');
-    Route::delete('/cat_products/{id}', 'CatProductController@delete');
+    Route::controller(CatProductController::class)->group(function () {
+        Route::get('/cat_products', 'getAll');
+        Route::get('/cat_products/{id}', 'find');
+        Route::post('/cat_products', 'add');
+        Route::post('/cat_products/paginate', 'getPaginate');
+        Route::put('/cat_products/{id}', 'update');
+        Route::delete('/cat_products/{id}', 'delete');
+    });
 
-    Route::get('/cat_pills', 'CatPillController@getAll');
-    Route::get('/cat_pills/{id}', 'CatPillController@find');
-    Route::post('/cat_pills', 'CatPillController@add');
-    Route::post('/cat_pills/paginate', 'CatPillController@getPaginate');
-    Route::put('/cat_pills/{id}', 'CatPillController@update');
-    Route::delete('/cat_pills/{id}', 'CatPillController@delete');
+    Route::controller(CatPillController::class)->group(function () {
+        Route::get('/cat_pills', 'getAll');
+        Route::get('/cat_pills/{id}', 'find');
+        Route::post('/cat_pills', 'add');
+        Route::post('/cat_pills/paginate', 'getPaginate');
+        Route::put('/cat_pills/{id}', 'update');
+        Route::delete('/cat_pills/{id}', 'delete');
+    });
 
-    Route::get('/cat_services', 'CatServiceController@getAll');
-    Route::get('/cat_services/{id}', 'CatServiceController@find');
-    Route::post('/cat_services', 'CatServiceController@add');
-    Route::post('/cat_services/paginate', 'CatServiceController@getPaginate');
-    Route::put('/cat_services/{id}', 'CatServiceController@update');
-    Route::delete('/cat_services/{id}', 'CatServiceController@delete');
+    Route::controller(CatServiceController::class)->group(function () {
+        Route::get('/cat_services', 'getAll');
+        Route::get('/cat_services/{id}', 'find');
+        Route::post('/cat_services', 'add');
+        Route::post('/cat_services/paginate', 'getPaginate');
+        Route::put('/cat_services/{id}', 'update');
+        Route::delete('/cat_services/{id}', 'delete');
+    });
 
-    Route::get('/cat_type_sales', 'CatTypeSalesController@getAll');
-    Route::get('/cat_type_sales/{id}', 'CatTypeSalesController@find');
-    Route::post('/cat_type_sales', 'CatTypeSalesController@add');
-    Route::post('/cat_type_sales/paginate', 'CatTypeSalesController@getPaginate');
-    Route::put('/cat_type_sales/{id}', 'CatTypeSalesController@update');
-    Route::delete('/cat_type_sales/{id}', 'CatTypeSalesController@delete');
+    Route::controller(CatTypeSalesController::class)->group(function () {
+        Route::get('/cat_type_sales', 'getAll');
+        Route::get('/cat_type_sales/{id}', 'find');
+        Route::post('/cat_type_sales', 'add');
+        Route::post('/cat_type_sales/paginate', 'getPaginate');
+        Route::put('/cat_type_sales/{id}', 'update');
+        Route::delete('/cat_type_sales/{id}', 'delete');
+    });
 
-    Route::get('/cat_expenses', 'CatExpensesController@getAll');
-    Route::post('/cat_expenses', 'CatExpensesController@add');
-    Route::post('/cat_expenses/paginate', 'CatExpensesController@getPaginate');
-    Route::put('/cat_expenses/{id}', 'CatExpensesController@update');
-    Route::delete('/cat_expenses/{id}', 'CatExpensesController@delete');
+    Route::controller(CatExpensesController::class)->group(function () {
+        Route::get('/cat_expenses', 'getAll');
+        Route::post('/cat_expenses', 'add');
+        Route::post('/cat_expenses/paginate', 'getPaginate');
+        Route::put('/cat_expenses/{id}', 'update');
+        Route::delete('/cat_expenses/{id}', 'delete');
+    });
 
-    Route::get('/cat_concepts', 'CatConceptController@getAll');
-    Route::post('/cat_concepts', 'CatConceptController@add');
-    Route::post('/cat_concepts/paginate', 'CatConceptController@getPaginate');
-    Route::put('/cat_concepts/{id}', 'CatConceptController@update');
-    Route::delete('/cat_concepts/{id}', 'CatConceptController@delete');
+    Route::controller(CatConceptController::class)->group(function () {
+        Route::get('/cat_concepts', 'getAll');
+        Route::post('/cat_concepts', 'add');
+        Route::post('/cat_concepts/paginate', 'getPaginate');
+        Route::put('/cat_concepts/{id}', 'update');
+        Route::delete('/cat_concepts/{id}', 'delete');
+    });
 
-    Route::get('/sales', 'SaleController@getAll');
-    Route::get('/sales/sales_day', 'SaleController@getForDay');
-    Route::get('/sales/{id}', 'SaleController@findId');
-    Route::get('/sales/user/{id}', 'SaleController@getSalesUserDay');
-    
-    Route::post('/sales', 'SaleController@add');
-    Route::post('/sales/cute_now', 'SaleController@cuteSales');
-    Route::post('/sales/cute_day', 'SaleController@getCuteSales');
-    Route::post('/sales/paginate', 'SaleController@getPaginate');
-    Route::post('/sales/user_day', 'SaleController@getSalesUserDay');
-    Route::post('/sales/cancel/{id}', 'SaleController@cancel');
-    Route::put('/sales/{id}', 'SaleController@update');
-    Route::delete('/sales/{id}', 'SaleController@delete');
+    Route::controller(SaleController::class)->group(function () {
+        Route::get('/sales', 'getAll');
+        Route::get('/sales/sales_day', 'getForDay');
+        Route::get('/sales/{id}', 'findId');
+        Route::get('/sales/user/{id}', 'getSalesUserDay');
+        Route::post('/sales', 'add');
+        Route::post('/sales/cute_now', 'cuteSales');
+        Route::post('/sales/cute_day', 'getCuteSales');
+        Route::post('/sales/paginate', 'getPaginate');
+        Route::post('/sales/user_day', 'getSalesUserDay');
+        Route::post('/sales/cancel/{id}', 'cancel');
+        Route::put('/sales/{id}', 'update');
+        Route::delete('/sales/{id}', 'delete');
+    });
 
-    Route::get('/sale_additionals/{id}', 'SaleAdditionalController@find');
-    Route::post('/sale_additionals', 'SaleAdditionalController@add');
-    Route::put('/sale_additionals/{id}', 'SaleAdditionalController@update');
-    Route::delete('/sale_additionals/{id}', 'SaleAdditionalController@delete');
+    Route::controller(SaleAdditionalController::class)->group(function () {
+        Route::get('/sale_additionals/{id}', 'find');
+        Route::post('/sale_additionals', 'add');
+        Route::put('/sale_additionals/{id}', 'update');
+        Route::delete('/sale_additionals/{id}', 'delete');
+    });
 
-    Route::get('/products_inventory', 'ProductInventoryController@getAll');
-    Route::get('/products_inventory/{id}', 'ProductInventoryController@find');
-    Route::get('/products_inventory/product/{id}', 'ProductInventoryController@forProduct');
-    Route::post('/products_inventory', 'ProductInventoryController@add');
-    Route::put('/products_inventory/{id}', 'ProductInventoryController@update');
-    Route::delete('/products_inventory/{id}', 'ProductInventoryController@delete');
+    Route::controller(ProductInventoryController::class)->group(function () {
+        Route::get('/products_inventory', 'getAll');
+        Route::get('/products_inventory/{id}', 'find');
+        Route::get('/products_inventory/product/{id}', 'forProduct');
+        Route::post('/products_inventory', 'add');
+        Route::put('/products_inventory/{id}', 'update');
+        Route::delete('/products_inventory/{id}', 'delete');
+    });
 
-    Route::get('/pills_inventory', 'PillInventoryController@getAll');
-    Route::get('/pills_inventory/{id}', 'PillInventoryController@find');
-    Route::get('/pills_inventory/pill/{id}', 'PillInventoryController@forPill');
-    Route::post('/pills_inventory', 'PillInventoryController@add');
-    Route::put('/pills_inventory/{id}', 'PillInventoryController@update');
-    Route::delete('/pills_inventory/{id}', 'PillInventoryController@delete');
+    Route::controller(PaymentController::class)->group(function () {
+        Route::get('/payments', 'getAll');
+        Route::get('/payments/{id}', 'find');
+        Route::get('/payments/for_sale/{id}', 'forSaleId');
+        Route::post('/payments', 'add');
+        Route::put('/payments/{id}', 'update');
+        Route::delete('/payments/{id}', 'delete');
+    });
 
-    Route::get('/payments', 'PaymentController@getAll');
-    Route::get('/payments/{id}', 'PaymentController@find');
-    Route::get('/payments/for_sale/{id}', 'PaymentController@forSaleId');
-    Route::post('/payments', 'PaymentController@add');
-    Route::put('/payments/{id}', 'PaymentController@update');
-    Route::delete('/payments/{id}', 'PaymentController@delete');
+    Route::controller(DepartmentController::class)->group(function () {
+        Route::get('/departments', 'getAll');
+        Route::get('/departments/{id}', 'find');
+        Route::get('/departments/{id}/sales', 'getSales');
+        Route::post('/departments', 'add');
+        Route::put('/departments/{id}', 'update');
+        Route::delete('/departments/{id}', 'delete');
+    });
 
-    Route::get('/departments', 'DepartmentController@getAll');
-    Route::get('/departments/{id}', 'DepartmentController@find');
-    Route::get('/departments/{id}/sales', 'DepartmentController@getSales');
-    Route::post('/departments', 'DepartmentController@add');
-    Route::put('/departments/{id}', 'DepartmentController@update');
-    Route::delete('/departments/{id}', 'DepartmentController@delete');
+    Route::controller(PackageController::class)->group(function () {
+        Route::get('/packages', 'getAll');
+        Route::get('/packages/{id}', 'find');
+        Route::post('/packages', 'add');
+        Route::post('/packages/is_completed', 'isCompleted');
+        Route::post('/packages/paginate', 'getPaginate');
+        Route::put('/packages/{id}', 'update');
+        Route::delete('/packages/{id}', 'delete');
+    });
 
-    Route::get('/packages', 'PackageController@getAll');
-    Route::get('/packages/{id}', 'PackageController@find');
-    Route::post('/packages', 'PackageController@add');
-    Route::post('/packages/is_completed', 'PackageController@isCompleted');
-    Route::post('/packages/paginate', 'PackageController@getPaginate');
-    Route::put('/packages/{id}', 'PackageController@update');
-    Route::delete('/packages/{id}', 'PackageController@delete');
-    
+    Route::controller(PackageTrackingController::class)->group(function () {
+        Route::get('/packages_tracking', 'getAll');
+        Route::get('/packages_tracking/{id}', 'find');
+        Route::get('/packages_tracking/for_package/{id}', 'forPackageId');
+        Route::post('/packages_tracking', 'add');
+        Route::put('/packages_tracking/{id}', 'update');
+        Route::delete('/packages_tracking/{id}', 'delete');
+    });
 
-    Route::get('/packages_tracking', 'PackageTrackingController@getAll');
-    Route::get('/packages_tracking/{id}', 'PackageTrackingController@find');
-    Route::get('/packages_tracking/for_package/{id}', 'PackageTrackingController@forPackageId');
-    Route::post('/packages_tracking', 'PackageTrackingController@add');
-    Route::put('/packages_tracking/{id}', 'PackageTrackingController@update');
-    Route::delete('/packages_tracking/{id}', 'PackageTrackingController@delete');
+    Route::controller(PurchaseController::class)->group(function () {
+        Route::get('/purchases', 'getAll');
+        Route::post('/purchases', 'add');
+        Route::post('/purchases/paginate', 'getPaginate');
+        Route::post('/purchases/pay/{id}', 'pay');
+        Route::post('/purchases/cancel/{id}', 'cancel');
+        Route::put('/purchases/{id}', 'update');
+        Route::delete('/purchases/{id}', 'delete');
+    });
 
-    Route::get('/purchases', 'PurchaseController@getAll');
-    Route::post('/purchases', 'PurchaseController@add');
-    Route::post('/purchases/paginate', 'PurchaseController@getPaginate');
-    Route::post('/purchases/pay/{id}', 'PurchaseController@pay');
-    Route::post('/purchases/cancel/{id}', 'PurchaseController@cancel');
-    Route::put('/purchases/{id}', 'PurchaseController@update');
-    Route::delete('/purchases/{id}', 'PurchaseController@delete');
+    Route::controller(BoxController::class)->group(function () {
+        Route::post('/box/balance', 'getBalance');
+        Route::post('/box/sales_chart', 'getSalesChart');
+        Route::post('/box/sales_package', 'getSalesForPackageChart');
+        Route::post('/box/sales_service', 'getSalesForServiceChart');
+        Route::post('/box/sales_service', 'getSalesForServiceChart');
+    });
 
-    Route::post('/box/balance', 'BoxController@getBalance');
-    Route::post('/box/sales_chart', 'BoxController@getSalesChart');
-    Route::post('/box/sales_package', 'BoxController@getSalesForPackageChart');
-    Route::post('/box/sales_service', 'BoxController@getSalesForServiceChart');
-    Route::post('/box/sales_service', 'BoxController@getSalesForServiceChart');
-     
 });
+

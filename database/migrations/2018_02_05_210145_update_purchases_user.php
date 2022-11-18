@@ -14,8 +14,8 @@ class UpdatePurchasesUser extends Migration
     public function up()
     {
         Schema::table('purchases', function (Blueprint $table) {
-            $table->integer('user_id')->nullable()->unsigned();
-            $table->foreign('user_id')->references('id')->on('users');
+            //$table->integer('user_id')->nullable()->unsigned();
+            $table->foreignId('user_id')->nullable()->references('id')->on('users');
         });
     }
 

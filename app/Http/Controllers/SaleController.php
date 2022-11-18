@@ -1,27 +1,18 @@
 <?php
 
-namespace fase2\Http\Controllers;
-use fase2\Sale;
-use fase2\SellingElements;
-use fase2\Department;
-use fase2\Client;
-use fase2\User;
-use fase2\Package;
-use fase2\CatPackage;
-use fase2\PackageTracking;
-use fase2\Payment;
-use fase2\PillInventory;
-use fase2\ProductInventory;
-use fase2\SaleAdditional;
+namespace App\Http\Controllers;
+use App\Models\Sale;
+use App\Models\Department;
+use App\Models\Package;
+use App\Models\CatPackage;
+use App\Models\Payment;
+use App\Models\PillInventory;
+use App\Models\ProductInventory;
+use App\Models\SaleAdditional;
 use Carbon\Carbon;
 use DateTime;
-use File;
-use Auth;
 use Illuminate\Http\Request;
-use Illuminate\Http\Exception\HttpResponseException;
-use fase2\Http\Requests\SalePostRequest;
-use Illuminate\Support\Facades\DB;
-use fase2\Log;
+use App\Models\Log;
 /**
  * @resource Example
  *
@@ -29,28 +20,46 @@ use fase2\Log;
  */
 class SaleController extends Controller
 {
-	/**
-	 * @return view
-	 *
-	*/
-   	public function index(Request $request){
-		return view('sale.index');
-	}
 
     /**
-	 * @return array
-	 *
-	*/
+     * @OA\Get(
+     *     path="/api/sales",
+     *     tags={"sales"},
+     *     summary="Get all sales",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Valida existencia de usuario."
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="Ha ocurrido un error."
+     *     )
+     * )
+     */
 	public function getAll() {
 		$sale = Sale::where('primary_id',null)->with(['department','client','sales'=>function($query){
 			$query->with(['department','client', 'responsible', 'type', 'cat_package', 'cat_service', 'cat_pill', 'cat_product']);
 		}])->get();
 		return response($sale, 200)->header('Content-Type', 'application/json');
 	}
-/**
-	 * @return array
-	 *
-	*/
+
+     /**
+     * @OA\Post(
+     *     path="/api/sales/paginate",
+     *     tags={"sales"},
+     *     summary="Get sales per paginate",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Valida existencia de usuario."
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="Ha ocurrido un error."
+     *     )
+     * )
+     */
 	public function getPaginate(Request $request) {
 		//per_page
 		$perPage = 15;
@@ -60,31 +69,29 @@ class SaleController extends Controller
 
 		$isPaid = $request->get('isPaid');
 
-		
 		switch($isPaid){
 			case 0:
-			$sales = Sale::with([
-				'department',
-				'client',
-				'responsible',
-				'type',
-				'user',
-				'sales' => function ($q) use ($isPaid) {
-					$q->where('is_paid', $isPaid);
-				},
-				'sales.department',
-				'sales.cat_package',
-				'sales.cat_service',
-				'sales.cat_pill',
-				'sales.type',
-				'sales.cat_product',
-				'sales.payments'])
-			->where('primary_id', null)
-			->where('is_paid', $isPaid)
-			->where('is_cancel', 0)
-			->orderBy('updated_at', 'desc')->paginate($perPage);
-			return response($sales, 200)->header('Content-Type', 'application/json');
-			break;
+                $sales = Sale::with([
+                    'department',
+                    'client',
+                    'responsible',
+                    'type',
+                    'user',
+                    'sales' => function ($q) use ($isPaid) {
+                        $q->where('is_paid', $isPaid);
+                    },
+                    'sales.department',
+                    'sales.cat_package',
+                    'sales.cat_service',
+                    'sales.cat_pill',
+                    'sales.type',
+                    'sales.cat_product',
+                    'sales.payments'])
+                ->where('primary_id', null)
+                ->where('is_paid', $isPaid)
+                ->where('is_cancel', 0)
+                ->orderBy('updated_at', 'desc')->paginate($perPage);
+                return response($sales, 200)->header('Content-Type', 'application/json');
 			case 1:
 				$sales = Sale::with([
 					'department',
@@ -105,7 +112,6 @@ class SaleController extends Controller
 				->where('primary_id', null)
 				->orderBy('updated_at', 'desc')->paginate($perPage);
 				return response($sales, 200)->header('Content-Type', 'application/json');
-			break;
 			case 2:
 				//$from = date('Y-m-d' . ' 00:00:01', time());
 				$salesForCout = Sale::select('cute_date')
@@ -116,37 +122,54 @@ class SaleController extends Controller
 				->paginate($perPage);
 
 				return response($salesForCout, 200)->header('Content-Type', 'application/json');
-			break;
 			case 3:
-			$sales = Sale::with([
-				'department',
-				'client',
-				'responsible',
-				'type',
-				'user',
-				'sales' => function ($q) use ($isPaid) {
-					$q->where('is_paid', $isPaid);
-				},
-				'sales.department',
-				'sales.cat_package',
-				'sales.cat_service',
-				'sales.cat_pill',
-				'sales.type',
-				'sales.cat_product',
-				'sales.payments'])
-			->where('primary_id', null)
-			->where('is_cancel', 1)
-			->orderBy('updated_at', 'desc')->paginate($perPage);
-			return response($sales, 200)->header('Content-Type', 'application/json');
-			break;
+                $sales = Sale::with([
+                    'department',
+                    'client',
+                    'responsible',
+                    'type',
+                    'user',
+                    'sales' => function ($q) use ($isPaid) {
+                        $q->where('is_paid', $isPaid);
+                    },
+                    'sales.department',
+                    'sales.cat_package',
+                    'sales.cat_service',
+                    'sales.cat_pill',
+                    'sales.type',
+                    'sales.cat_product',
+                    'sales.payments'])
+                ->where('primary_id', null)
+                ->where('is_cancel', 1)
+                ->orderBy('updated_at', 'desc')->paginate($perPage);
+                return response($sales, 200)->header('Content-Type', 'application/json');
 		}
 
-		
+
 	}
-	/**
-	 * @return array
-	 *
-	*/
+
+     /**
+     * @OA\Get(
+     *     path="/api/sales/{id}",
+     *     tags={"sales"},
+     *     summary="Get sale",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Parameter(
+     *        name="id",
+     *        in="query",
+     *        description="",
+     *        required=true,
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Valida existencia de usuario."
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="Ha ocurrido un error."
+     *     )
+     * )
+     */
 	public function findId($id){
 		$sale = Sale::with(
 			'department',
@@ -161,16 +184,29 @@ class SaleController extends Controller
 			'sales.cat_pill',
 			'sales.cat_product')
 		->find($id);
-		
+
 		return response($sale, 200)->header('Content-Type', 'application/json');
 	}
-	/**
-	 * @return array
-	 *
-	*/
+
+     /**
+     * @OA\Get(
+     *     path="/api/sales/sales_day",
+     *     tags={"sales"},
+     *     summary="Get sales per day",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Valida existencia de usuario."
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="Ha ocurrido un error."
+     *     )
+     * )
+     */
 	public function getForDay(){
 
-		$from = date('Y-m-d' . ' 00:00:00', time()); 
+		$from = date('Y-m-d' . ' 00:00:00', time());
 		$sales = Sale::with(
 			'department',
 			'client',
@@ -188,15 +224,28 @@ class SaleController extends Controller
 		->where('is_cute', 0)
 		->orderBy('primary_id', 'desc')
 		->get();
-		
+
 		return response($sales, 200)->header('Content-Type', 'application/json');
 	}
-	/**
-	 * @return array
-	 *
-	*/
+
+     /**
+     * @OA\Get(
+     *     path="/api/sales/user/{id}",
+     *     tags={"sales"},
+     *     summary="Get sales per user",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Valida existencia de usuario."
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="Ha ocurrido un error."
+     *     )
+     * )
+     */
 	public function getSalesUserDay($user_id){
-		$from = date('Y-m-d' . ' 00:00:00', time()); 
+		$from = date('Y-m-d' . ' 00:00:00', time());
 		$sales = Sale::with(
 			['department',
 			'client',
@@ -210,7 +259,7 @@ class SaleController extends Controller
 			'sales.type',
 			'sales.cat_product',
 			'sales.payments'=>function($query){
-				$from = date('Y-m-d' . ' 00:00:00', time()); 
+				$from = date('Y-m-d' . ' 00:00:00', time());
 				$query->where('created_at','>=',$from);
 			}])
 		->where('primary_id', null)
@@ -219,13 +268,26 @@ class SaleController extends Controller
 		->where('user_id', $user_id)
 		->orderBy('primary_id', 'desc')
 		->get();
-		
+
 		return response($sales, 200)->header('Content-Type', 'application/json');
 	}
-	/**
-	 * @return array
-	 *
-	*/
+
+     /**
+     * @OA\Post(
+     *     path="/api/sales/cute_now",
+     *     tags={"purchases"},
+     *     summary="Get sales now",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Valida existencia de usuario."
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="Ha ocurrido un error."
+     *     )
+     * )
+     */
 	public function cuteSales(Request $request) {
 		if(!$request->has('user_id')){
 			return response('No se encontro el parametro user_id',404)
@@ -298,11 +360,27 @@ class SaleController extends Controller
 				$count++;
 			}
 		}
-		
+
 		return response($json, 200)->header('Content-Type', 'application/json');
 	}
 
 
+     /**
+     * @OA\Post(
+     *     path="/api/sales/cute_day",
+     *     tags={"sales"},
+     *     summary="Get sales per day",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Valida existencia de usuario."
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="Ha ocurrido un error."
+     *     )
+     * )
+     */
 	public function getCuteSales(Request $request) {
 		$from = date('Y-m-d' . ' 00:00:01', time());
 		if($request->has('date')){
@@ -381,10 +459,22 @@ class SaleController extends Controller
 	}
 
 
-	/**
-	 * @return array
-	 *
-	*/
+	 /**
+     * @OA\Post(
+     *     path="/api/sales",
+     *     tags={"sales"},
+     *     summary="Add sale",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Valida existencia de usuario."
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="Ha ocurrido un error."
+     *     )
+     * )
+     */
 	public function add(Request $request){
 		$primary = new Sale;
 		$primary->department_id = 0;//$request->get('sales')[0]['department_id'];
@@ -412,12 +502,12 @@ class SaleController extends Controller
 
 			$total = $_sale['price'] * $_sale['count'];
 			$discount = 0;
-			
+
 			if(isset($_sale['discount'])){
 				$sale->discount = $_sale['discount'];
 				$discount = (($sale->discount * $total) / 100);
 			}
-	    		
+
 			$sale->total = $total - $discount;
 			$sale->amount = $_sale['amount'];
 			$sale->partial_payment = $_sale['amount'];
@@ -445,7 +535,7 @@ class SaleController extends Controller
 			$payment->type_sale_id = $_sale['type_sale_id'];
 	        $payment->amount = $_sale['amount'];
 			$payment->save();
-			
+
 
 			if(isset($_sale['package_id'])){
 				$package = new Package;
@@ -457,7 +547,7 @@ class SaleController extends Controller
 			}
 
 			if(isset($_sale['service_id'])){
-				
+
 			}
 
 			if(isset($_sale['pill_id'])){
@@ -482,14 +572,14 @@ class SaleController extends Controller
 					$pillInventory->count = ($pillInventory->count - $_additional["count"]);
 					$pillInventory->save();
 				}
-					
+
 				if(isset($_additional['product_id'])){
 					$additional->product_id = $_additional['product_id'];
 					$productInventory = ProductInventory::where('product_id',$_additional["product_id"])->first();
 					$productInventory->count = ($productInventory->count - $_additional["count"]);
 					$productInventory->save();
 				}
-				
+
 				$additional->count =  $_additional['count'];
 				$additional->save();
 			}
@@ -497,7 +587,7 @@ class SaleController extends Controller
 
 		$total =  Sale::where('primary_id',$primary->id)->sum('total');
 		$balance = Sale::where('primary_id',$primary->id)->sum('amount');
-		
+
 		$primary = Sale::find($primary->id);
 
 		$primary->total = $total;
@@ -513,22 +603,40 @@ class SaleController extends Controller
 	 *
 	*/
 	public function addSales(Request $request){
-		return response($sale, 200)->header('Content-Type', 'application/json');
+		return response(200)->header('Content-Type', 'application/json');
 	}
 	/**
 	 * @return array
 	 *
 	*/
-    public function update($id,Request $request){// se envia el id a $client 
+    public function update($id,Request $request){// se envia el id a $client
 
-    	return response($provider, 200)->header('Content-Type', 'application/json');
+    	return response(200)->header('Content-Type', 'application/json');
 	}
-	
-/**
-	 * @param  Guard  $auths
-	 * @return void
-	*/
-	public function cancel($id, Request $request){// se envia el id a $client 
+
+    /**
+     * @OA\Post(
+     *     path="/api/sales/cancel/{id}",
+     *     tags={"sales"},
+     *     summary="Canel sale",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Parameter(
+     *        name="id",
+     *        in="query",
+     *        description="",
+     *        required=true,
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Valida existencia de usuario."
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="Ha ocurrido un error."
+     *     )
+     * )
+     */
+	public function cancel($id, Request $request){// se envia el id a $client
 
 		$userId = $request->get('user_id');
 		$Sale = Sale::with(['sales'])
@@ -539,7 +647,7 @@ class SaleController extends Controller
 		//Log::info('Log message ', $Sale);
 		if($Sale->primary_id == null){
 			foreach ($Sale['sales'] as $_s) {
-				$update = Sale::find($_s->id); 
+				$update = Sale::find($_s->id);
 				if($update->product_id != null){
 					$productInventory = ProductInventory::where('product_id',$update->product_id)->first();
 					$productInventory->count = ($productInventory->count + $update->count );
@@ -550,7 +658,7 @@ class SaleController extends Controller
 						$productInventory = ProductInventory::where('product_id',$complement['product_id'])->first();
 						$productInventory->count = ($productInventory->count + $complement['count'] );
 						$productInventory->save();
-					}	
+					}
 				}
 
 				$update->is_cancel = 1;
@@ -576,7 +684,7 @@ class SaleController extends Controller
 					$productInventory = ProductInventory::where('product_id',$complement['product_id'])->first();
 					$productInventory->count = ($productInventory->count + $complement['count'] );
 					$productInventory->save();
-				}	
+				}
 			}
 
 			$log = new Log;
@@ -595,12 +703,30 @@ class SaleController extends Controller
     	return response($Sale, 200)->header('Content-Type', 'application/json');
     }
 
-	/**
-	 * @param  Guard  $auth
-	 * @return void
-	*/
-    public function delete($id){// se envia el id a $client 
-		$Sale = Sale::find($id);  
+	 /**
+     * @OA\Delete(
+     *     path="/api/sales/{id}",
+     *     tags={"sales"},
+     *     summary="Delete sale",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Parameter(
+     *        name="id",
+     *        in="query",
+     *        description="",
+     *        required=true,
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Valida existencia de usuario."
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="Ha ocurrido un error."
+     *     )
+     * )
+     */
+    public function delete($id){// se envia el id a $client
+		$Sale = Sale::find($id);
 		$primary_id = $Sale->primary_id;
 
 		if($Sale->sales()->count()>0){
@@ -621,16 +747,16 @@ class SaleController extends Controller
 			$Sale->additionals()->delete();
 			$Sale->sales()->delete();
 			$Sale->payments()->delete();
-			$Sale->packages()->delete();	
+			$Sale->packages()->delete();
 			$Sale->delete();
 		}
 
 		if($primary_id == null && $Sale->sales()->count()>0){
-			$Sale = Sale::find($primary_id);  
+			$Sale = Sale::find($primary_id);
 			$Sale->additionals()->delete();
 			$Sale->sales()->delete();
 			$Sale->payments()->delete();
-			$Sale->packages()->delete();	
+			$Sale->packages()->delete();
 			$Sale->delete();
 		}
 

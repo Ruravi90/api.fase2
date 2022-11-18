@@ -14,7 +14,10 @@ class ForeignLogsUserIdOnLogs extends Migration
     public function up()
     {
         Schema::table('logs',function(Blueprint $table){
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->dropColumn(['user_id']);
+        });
+        Schema::table('logs',function(Blueprint $table){
+            $table->foreignId('user_id')->nullable()->references('id')->on('users');
         });
     }
 

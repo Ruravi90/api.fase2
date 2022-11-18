@@ -1,13 +1,12 @@
 <?php
 
-namespace fase2\Http\Controllers;
-use fase2\Events\ActionTasks;
+namespace App\Http\Controllers;
+use App\Events\ActionTasks;
 use Illuminate\Http\Request;
-use fase2\Task;
+use App\Models\Task;
 
 class TaskController extends Controller
 {
-    //
 
     public function send()
     {
@@ -17,8 +16,8 @@ class TaskController extends Controller
         $task->date =  date('Y-m-d H:i:s');
         $task->is_completed = false;
         $task->user_id = 1;
-    
-        event(new ActionTasks($task));
+
+        //event(new ActionTasks($task));
         return response('Pusher tarea',200);
     }
 }

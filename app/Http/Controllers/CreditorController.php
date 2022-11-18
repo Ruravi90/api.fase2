@@ -1,31 +1,78 @@
 <?php
-namespace fase2\Http\Controllers;
-use fase2\Creditor;
-use fase2\Address;
+namespace App\Http\Controllers;
+use App\Models\Creditor;
+use App\Models\Address;
+use App\Http\Requests\CreditorRequest;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use fase2\Http\Requests\CreditorRequest;
 
 class CreditorController extends Controller
 {
 
-    public function index()
-    {
-        return view('creditor.index');
-    }
-
-    // Api rest
+    /**
+     * @OA\Get(
+     *     path="/api/creditos",
+     *     tags={"creditors"},
+     *     summary="Get all creditos",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Valida existencia de usuario."
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="Ha ocurrido un error."
+     *     )
+     * )
+     */
     public function getAll(){
         $creditors =  Creditor::all();
         return response($creditors, 200)->header('Content-Type', 'application/json');
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/creditos/{id}",
+     *     tags={"creditors"},
+     *     summary="Get credito",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Parameter(
+     *        name="id",
+     *        in="query",
+     *        description="",
+     *        required=true,
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Valida existencia de usuario."
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="Ha ocurrido un error."
+     *     )
+     * )
+     */
     public function find($id){
         $creditor = Creditor::with('address')->find($id);
         return response($creditor, 200)->header('Content-Type', 'application/json');
     }
 
-	public function add(CreditorRequest $request){
+    /**
+     * @OA\Post(
+     *     path="/api/creditos/{id}",
+     *     tags={"creditors"},
+     *     summary="Add credito",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Valida existencia de usuario."
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="Ha ocurrido un error."
+     *     )
+     * )
+     */
+	public function add(Request $request){
 		$creditor = new Creditor;
 		$creditor->business_name = $request->get('business_name');
 		$creditor->contact_name = $request->get('contact_name');
@@ -51,7 +98,29 @@ class CreditorController extends Controller
 		return response(['success' => true],200)->header('Content-Type', 'application/json');
 	}
 
-    public function update($id,CreditorRequest $request){// se envia el id a $client 
+    /**
+     * @OA\Put(
+     *     path="/api/creditos/{id}",
+     *     tags={"creditors"},
+     *     summary="Update credito",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Parameter(
+     *        name="id",
+     *        in="query",
+     *        description="",
+     *        required=true,
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Valida existencia de usuario."
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="Ha ocurrido un error."
+     *     )
+     * )
+     */
+    public function update($id,Request $request){// se envia el id a $client
     	$creditor = Creditor::find($id);
 		$creditor->business_name = $request->get('business_name');
 		$creditor->contact_name = $request->get('contact_name');
@@ -86,9 +155,31 @@ class CreditorController extends Controller
     	return response(['success' => true],200)->header('Content-Type', 'application/json');
     }
 
-    public function delete($id){// se envia el id a $client 
+    /**
+     * @OA\Delete(
+     *     path="/api/creditos/{id}",
+     *     tags={"creditors"},
+     *     summary="Delete credito",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Parameter(
+     *        name="id",
+     *        in="query",
+     *        description="",
+     *        required=true,
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Valida existencia de usuario."
+     *     ),
+     *     @OA\Response(
+     *         response="default",
+     *         description="Ha ocurrido un error."
+     *     )
+     * )
+     */
+    public function delete($id){// se envia el id a $client
     	$creditor = Creditor::find($id);
 		$creditor->delete();
     	return response(['success' => true],200)->header('Content-Type', 'application/json');
-    } 
+    }
 }
