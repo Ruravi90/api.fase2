@@ -1,22 +1,12 @@
 <?php
 
-namespace fase2\Console;
+namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use fase2\Console\Commands\LogHistoryBlance;
 
 class Kernel extends ConsoleKernel
 {
-    /**
-     * The Artisan commands provided by your application.
-     *
-     * @var array
-     */
-    protected $commands = [
-        LogHistoryBlance::class,
-    ];
-
     /**
      * Define the application's command schedule.
      *
@@ -25,8 +15,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        //$schedule->command('task:session_lost')->dailyAt('12:00');
-        $schedule->command('log:history_balance')->monthlyOn(1, '12:00');
+        // $schedule->command('inspire')->hourly();
     }
 
     /**
@@ -37,6 +26,7 @@ class Kernel extends ConsoleKernel
     protected function commands()
     {
         $this->load(__DIR__.'/Commands');
+
         require base_path('routes/console.php');
     }
 }

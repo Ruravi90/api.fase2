@@ -1,0 +1,3142 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "FASE 2 API",
+        "description": "FASE 2 Swagger OpenApi",
+        "contact": {
+            "email": "eaguilar.arrezola@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0",
+        "x-logo": {
+            "url": "https://via.placeholder.com/190x90.png?text=L5-Swagger"
+        }
+    },
+    "paths": {
+        "/api/agents": {
+            "get": {
+                "tags": [
+                    "agents"
+                ],
+                "summary": "Get all agents",
+                "operationId": "c3472e4b464378a04737b2b69e244fda",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "agents"
+                ],
+                "summary": "Add agent",
+                "operationId": "9970c27ad1c69325505ae9c90bf30222",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/agents/{id}": {
+            "get": {
+                "tags": [
+                    "agents"
+                ],
+                "summary": "Get agent",
+                "operationId": "b2d65243e40b214088f810608a0e95b6",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "agents"
+                ],
+                "summary": "Update agent",
+                "operationId": "e910d56058655e786c26d8edffa93ed6",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "agents"
+                ],
+                "summary": "Delete agent",
+                "operationId": "0f375894d997d30ec163b6159e55deb1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/cat_expenses/paginate": {
+            "post": {
+                "tags": [
+                    "cat_expenses"
+                ],
+                "summary": "Get cat_expenses per paginate",
+                "operationId": "e871fa7760ee951d3ddc1fb8c2d8c594",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/cat_expenses": {
+            "get": {
+                "tags": [
+                    "cat_expenses"
+                ],
+                "summary": "Delete cat_expenses",
+                "operationId": "02a39e83ca2fcbb9628d2c10a86fb95a",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "cat_expenses"
+                ],
+                "summary": "Add cat_expenses",
+                "operationId": "8e4acfda463e427e48e2066656880661",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/cat_expenses/{id}": {
+            "get": {
+                "tags": [
+                    "cat_expenses"
+                ],
+                "summary": "Get cat_expenses",
+                "operationId": "37c139f62df99054e5d90c986d7c7f8e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "cat_expenses"
+                ],
+                "summary": "Update cat_expenses",
+                "operationId": "9f0885b0d21ee9c2aaf54f4bd04cfcd5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "cat_expenses"
+                ],
+                "summary": "Delete cat_expenses",
+                "operationId": "53e5adc47ba82553fbce5fabbd2f3b08",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/cat_packages/paginate": {
+            "post": {
+                "tags": [
+                    "cat_packages"
+                ],
+                "summary": "Get cat_packages per paginate",
+                "operationId": "49bd0eb2e70dbc79be3c14a8689e31a0",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/cat_packages": {
+            "get": {
+                "tags": [
+                    "cat_packages"
+                ],
+                "summary": "Get all cat_packages",
+                "operationId": "d47dbb79b2acc4f5c8bdf9df8bf59761",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/cat_packages/{id}": {
+            "get": {
+                "tags": [
+                    "cat_packages"
+                ],
+                "summary": "Get cat_packages",
+                "operationId": "2f938a34963fdb406b7299168c506d33",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "cat_packages"
+                ],
+                "summary": "Update cat_packages",
+                "operationId": "20bc0919862b074a9662e59201f67274",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "cat_packages"
+                ],
+                "summary": "Add cat_packages",
+                "operationId": "482dc060b9083bbcf16a3b9880395c72",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "cat_packages"
+                ],
+                "summary": "Delete cat_packages",
+                "operationId": "21b42acc8b1ef117958af4fdfc39fb83",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/cat_products/paginate": {
+            "post": {
+                "tags": [
+                    "cat_products"
+                ],
+                "summary": "Get all cat_product per paginate",
+                "operationId": "65f4a1f6736a2fe61b1e73014b54e826",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/cat_products": {
+            "get": {
+                "tags": [
+                    "cat_products"
+                ],
+                "summary": "Get all cat_products",
+                "operationId": "aa29d722f2bad2d64154bb65dc41b734",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "cat_products"
+                ],
+                "summary": "Add cat_product",
+                "operationId": "f8d4324894bcf143424453d63bddb9d7",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/cat_products/{id}": {
+            "get": {
+                "tags": [
+                    "cat_products"
+                ],
+                "summary": "Get cat_product",
+                "operationId": "1e919a914e65ec091f2a93f09dea7c40",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "cat_products"
+                ],
+                "summary": "Update cat_product",
+                "operationId": "87a1fd70eb8ceb27b3de89e705a9c7cd",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "cat_products"
+                ],
+                "summary": "Delete cat_product",
+                "operationId": "7fed786157b97ae9f8f8a26178154efa",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/cat_references/paginate": {
+            "get": {
+                "tags": [
+                    "cat_references"
+                ],
+                "summary": "Get cat references per paginate",
+                "operationId": "96f274b736b3be0edd1946426344586b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/cat_references": {
+            "get": {
+                "tags": [
+                    "cat_references"
+                ],
+                "summary": "Get all cat references",
+                "operationId": "a34d5fe4b082fda18bf523c07bc493fa",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/cat_references/{id}": {
+            "get": {
+                "tags": [
+                    "cat_references"
+                ],
+                "summary": "Get cat references",
+                "operationId": "53f19fa0aa9d253428a57d2bc17519e4",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "cat_references"
+                ],
+                "summary": "Update cat references",
+                "operationId": "110cebcddeaed341fa30c161da9809d7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "cat_references"
+                ],
+                "summary": "Add cat references",
+                "operationId": "79d3a28f21e7473f29fb678febe80c06",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "cat_references"
+                ],
+                "summary": "Delete cat references",
+                "operationId": "019af90d034ddf57b1b89e2adf6214b9",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/cat_services/paginate": {
+            "get": {
+                "tags": [
+                    "cat_services"
+                ],
+                "summary": "Get cat services per paginate",
+                "operationId": "2cb58d9324d9634c0ccdbfd4a88cf0ba",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/cat_services": {
+            "get": {
+                "tags": [
+                    "cat_services"
+                ],
+                "summary": "Get all cat services",
+                "operationId": "1c4161a36ffc8a3c9b946ff5610328aa",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "cat_services"
+                ],
+                "summary": "Get cat services",
+                "operationId": "05110339f661b23df5a5a467309eac28",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/cat_services/{id}": {
+            "get": {
+                "tags": [
+                    "cat_services"
+                ],
+                "summary": "Get cat services",
+                "operationId": "52af783e78a42c4675c00cdc180b8b3b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "cat_services"
+                ],
+                "summary": "Update cat services",
+                "operationId": "4bd7a9dc7d89d077734991e4be8844c4",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "cat_services"
+                ],
+                "summary": "Delete cat services",
+                "operationId": "30cd885634b57da0cf39859506f7cfd5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/cat_type_sales/paginate": {
+            "get": {
+                "tags": [
+                    "cat_type_sales"
+                ],
+                "summary": "Get cat type sales per paginate",
+                "operationId": "e96f568a0326401cd65b02198d309197",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/cat_type_sales": {
+            "get": {
+                "tags": [
+                    "cat_type_sales"
+                ],
+                "summary": "Get all cat type sales",
+                "operationId": "48d6b0470afaaee92c668778d71c1f18",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "cat_type_sales"
+                ],
+                "summary": "Get cat type sales",
+                "operationId": "b130b562ad8f83a6ad176c53c154eba9",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/cat_type_sales/{id}": {
+            "get": {
+                "tags": [
+                    "cat_type_sales"
+                ],
+                "summary": "Get cat type sales",
+                "operationId": "ec8d056139cbfc9f699c7d1332bc8a9d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "cat_type_sales"
+                ],
+                "summary": "Update cat type sales",
+                "operationId": "ffae3fffcb2c8d8fcdf3ce64e33915d9",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "cat_type_sales"
+                ],
+                "summary": "Delete cat type sales",
+                "operationId": "69b89d214c4e8c9bd6edd3f460a979ae",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/clients": {
+            "get": {
+                "tags": [
+                    "clients"
+                ],
+                "summary": "Get all clients",
+                "operationId": "4be9bbde54b325142519d9b8ae98b3b4",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "clients"
+                ],
+                "summary": "Add client",
+                "operationId": "044543d7eec2742cf73c6dd72fb5f4af",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/clients/{id}": {
+            "get": {
+                "tags": [
+                    "clients"
+                ],
+                "summary": "Get client",
+                "operationId": "b8445c760c565bf3eb59e44306e694a4",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "clients"
+                ],
+                "summary": "Update client",
+                "operationId": "7d0a5ae9e306858d30e04fc50265d80c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "clients"
+                ],
+                "summary": "Delete client",
+                "operationId": "8720346de08f1e46fe28a2a7179d23c1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/clients/paginate": {
+            "post": {
+                "tags": [
+                    "clients"
+                ],
+                "summary": "Get clients per paginate",
+                "operationId": "aac872b53af34ec165dd32739b18dda5",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/creditos": {
+            "get": {
+                "tags": [
+                    "creditors"
+                ],
+                "summary": "Get all creditos",
+                "operationId": "706d76be93f4623355f8d517493a4a10",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/creditos/{id}": {
+            "get": {
+                "tags": [
+                    "creditors"
+                ],
+                "summary": "Get credito",
+                "operationId": "17938333817b5989b9daef014b738e77",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "creditors"
+                ],
+                "summary": "Update credito",
+                "operationId": "55b722fa0c31f02efdfe48e34dde09ae",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "creditors"
+                ],
+                "summary": "Add credito",
+                "operationId": "48e56643c5a26631d1344e0e6324623e",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "creditors"
+                ],
+                "summary": "Delete credito",
+                "operationId": "014ebeb717a1351fc51f6684e8ea245e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/departments": {
+            "get": {
+                "tags": [
+                    "departments"
+                ],
+                "summary": "Get departments",
+                "operationId": "00e06ee5070b0169256db290e4965225",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "departments"
+                ],
+                "summary": "Add department",
+                "operationId": "135365a4fb14215278e0e9ec1c2b9617",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/departments/{id}": {
+            "get": {
+                "tags": [
+                    "departments"
+                ],
+                "summary": "Get department",
+                "operationId": "cf9d91808a97537b3b0b1f29260be893",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "departments"
+                ],
+                "summary": "Update department",
+                "operationId": "1d6fe343b0c809ce2a0722693aed793d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "departments"
+                ],
+                "summary": "Delete department",
+                "operationId": "db6767c5d916e56238234e001e2b5e21",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/departments/{id}/sales": {
+            "get": {
+                "tags": [
+                    "departments"
+                ],
+                "summary": "Get sales per department",
+                "operationId": "3b59cb22acf69a900cbc755c0c528a21",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/packages/{id}": {
+            "get": {
+                "tags": [
+                    "packages"
+                ],
+                "summary": "Get packages",
+                "operationId": "6ba11dcdcd05f83345ec8b492d8b01b9",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "packages"
+                ],
+                "summary": "Get packages per paginate",
+                "operationId": "fc172458fb2b96532755e9ec41ea50be",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "packages"
+                ],
+                "summary": "Delte packages",
+                "operationId": "1409a1c05efe74e3f1f5494079510c98",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/packages": {
+            "get": {
+                "tags": [
+                    "packages"
+                ],
+                "summary": "Get all packages",
+                "operationId": "90e8cbf70134306bd322272a1fc8d66c",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/packages/is_completed/{id}": {
+            "post": {
+                "tags": [
+                    "packages"
+                ],
+                "summary": "Package is completed",
+                "operationId": "032958d04e0a34dd87dcbbc70a7b2a8f",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/packages_tracking": {
+            "get": {
+                "tags": [
+                    "packages_tracking"
+                ],
+                "summary": "Get all packages_tracking",
+                "operationId": "d404c5878e951c78c352d4f288d86460",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "packages_tracking"
+                ],
+                "summary": "Add packages_tracking",
+                "operationId": "3c7b23dfc86eedf805bbe0247ab7ff48",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/packages_tracking/{id}": {
+            "get": {
+                "tags": [
+                    "packages_tracking"
+                ],
+                "summary": "Get packages_tracking",
+                "operationId": "9c3c8addbdc21c9e91e1760e4dbbed34",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "packages_tracking"
+                ],
+                "summary": "Update packages_tracking",
+                "operationId": "a3f9098469265c5de5251e5ce378e955",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "packages_tracking"
+                ],
+                "summary": "Delete packages_tracking",
+                "operationId": "138253b1baf785cf67ef5b7ba8614b72",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/packages_tracking/for_package/{id}": {
+            "get": {
+                "tags": [
+                    "packages_tracking"
+                ],
+                "summary": "Get tracking per package",
+                "operationId": "c742b163b32e08ed72dcee5eacf85dbe",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "Id package",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/payments": {
+            "get": {
+                "tags": [
+                    "payments"
+                ],
+                "summary": "Get all payment",
+                "operationId": "0e8c9073925cb59c7663366dc49adbcd",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "payments"
+                ],
+                "summary": "Delete payment",
+                "operationId": "44f8d0b9122e96b592a596c979fb2a95",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/payments/{id}": {
+            "get": {
+                "tags": [
+                    "payments"
+                ],
+                "summary": "Get payment",
+                "operationId": "cbe2051728504d0d6145cf4af134a852",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "payments"
+                ],
+                "summary": "Delete payment",
+                "operationId": "65b424606f33ad51be0384e77db46155",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/payments/for_sale/{id}": {
+            "get": {
+                "tags": [
+                    "payments"
+                ],
+                "summary": "Get payment per sale",
+                "operationId": "c77edf759399aa3e9d63e70db594b2ca",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/products_inventory": {
+            "get": {
+                "tags": [
+                    "products_inventory"
+                ],
+                "summary": "Get all products_inventory",
+                "operationId": "940c9af258cc25278a93ffa7a3c28c81",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "products_inventory"
+                ],
+                "summary": "Add products_inventory",
+                "operationId": "52887d2118838f365a13548bf157495b",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/products_inventory/{id}": {
+            "get": {
+                "tags": [
+                    "products_inventory"
+                ],
+                "summary": "Get products_inventory",
+                "operationId": "f8f63319673763cb6574cfc726cce589",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "products_inventory"
+                ],
+                "summary": "Update products_inventory",
+                "operationId": "d7489b7d70c72fe479c64ef47fe85754",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "products_inventory"
+                ],
+                "summary": "Delete products_inventory",
+                "operationId": "abcc8167eff9c4e6709a66bf3bf67b89",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/products_inventory/product/{id}": {
+            "get": {
+                "tags": [
+                    "products_inventory"
+                ],
+                "summary": "Get products_inventory per product",
+                "operationId": "873e2dd4899dd3e24e07bb05f93e164b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/providers": {
+            "get": {
+                "tags": [
+                    "provides"
+                ],
+                "summary": "Get all providers",
+                "operationId": "ffc5716dada584c9dc1415e8e7108f1a",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "provides"
+                ],
+                "summary": "Add provider",
+                "operationId": "a28875d77542c226463fa69c09503859",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/providers/{id}": {
+            "get": {
+                "tags": [
+                    "provides"
+                ],
+                "summary": "Get provider",
+                "operationId": "f246e498b36131a55996564f68b97495",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "provides"
+                ],
+                "summary": "Update provider",
+                "operationId": "dd704e72367f2f4356d0ea0d1f210190",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "provides"
+                ],
+                "summary": "Delete provider",
+                "operationId": "504d3543df3e692dec22c6d86e6c1984",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/purchases/paginate": {
+            "post": {
+                "tags": [
+                    "purchases"
+                ],
+                "summary": "Get purchase per paginate",
+                "operationId": "4d8833104408e8909e4247f437885d7e",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/purchases": {
+            "get": {
+                "tags": [
+                    "purchases"
+                ],
+                "summary": "Get all purchases",
+                "operationId": "6ff45401b4ef432e7fafaa91c8e9e513",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "purchases"
+                ],
+                "summary": "Add purchase",
+                "operationId": "f1b6a3eaf182ed52b3c9d97ea2e8027a",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/purchases/{id}": {
+            "get": {
+                "tags": [
+                    "purchases"
+                ],
+                "summary": "Get purchase",
+                "operationId": "4aad3da11974dade35c9b2a902bc3e7e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "purchases"
+                ],
+                "summary": "Update purchase",
+                "operationId": "461bd92be49664b9dec01e83ea6235c7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "purchases"
+                ],
+                "summary": "Delete purchase",
+                "operationId": "68da2a0f195a3cf3d3f4482ddb775ad6",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/purchases/pay/{id}": {
+            "post": {
+                "tags": [
+                    "purchases"
+                ],
+                "summary": "Pay purchase",
+                "operationId": "549f238baff08126b20f610dcb6d4c5c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/purchases/cancel/{id}": {
+            "post": {
+                "tags": [
+                    "purchases"
+                ],
+                "summary": "Cancel purchase",
+                "operationId": "621ec5aaeac4ae262b8a5a6f565a0072",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/sale_additionals": {
+            "get": {
+                "tags": [
+                    "sale_additionals"
+                ],
+                "summary": "Get all sale_additionals",
+                "operationId": "19db0be80450399c4c08e23a967f8a85",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "sale_additionals"
+                ],
+                "summary": "Add sale_additionals",
+                "operationId": "207f45825200aff290fee826d5460515",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/sale_additionals/{id}": {
+            "get": {
+                "tags": [
+                    "sale_additionals"
+                ],
+                "summary": "Get sale_additionals",
+                "operationId": "ed1bfa08d6a2126acb78dca5de50a011",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "sale_additionals"
+                ],
+                "summary": "Update sale_additionals",
+                "operationId": "2b10c6bba1ebd5a0916b139034718401",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "sale_additionals"
+                ],
+                "summary": "Delete sale_additionals",
+                "operationId": "26b22ffa01d9942c1b7294d7a96e1e7d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/sales": {
+            "get": {
+                "tags": [
+                    "sales"
+                ],
+                "summary": "Get all sales",
+                "operationId": "d4ad50fa75fd736da7db67050b01936e",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "sales"
+                ],
+                "summary": "Add sale",
+                "operationId": "d0830e80f5417a3fdf3cdad93468c516",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/sales/paginate": {
+            "post": {
+                "tags": [
+                    "sales"
+                ],
+                "summary": "Get sales per paginate",
+                "operationId": "f18727bf9c17801a8125ec2343833b08",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/sales/{id}": {
+            "get": {
+                "tags": [
+                    "sales"
+                ],
+                "summary": "Get sale",
+                "operationId": "e1ea283bf28fc2498e1d36796ad15e8a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "sales"
+                ],
+                "summary": "Delete sale",
+                "operationId": "f3c12ee092a246265985b35d87b09d32",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/sales/sales_day": {
+            "get": {
+                "tags": [
+                    "sales"
+                ],
+                "summary": "Get sales per day",
+                "operationId": "5798b457c8a922b1455fe98b22167dbb",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/sales/user/{id}": {
+            "get": {
+                "tags": [
+                    "sales"
+                ],
+                "summary": "Get sales per user",
+                "operationId": "79214965445625f7ed93dd86565a25ea",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/sales/cute_now": {
+            "post": {
+                "tags": [
+                    "purchases"
+                ],
+                "summary": "Get sales now",
+                "operationId": "92393cb2112e5c4188794ed434508273",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/sales/cute_day": {
+            "post": {
+                "tags": [
+                    "sales"
+                ],
+                "summary": "Get sales per day",
+                "operationId": "5852e8334246a284ec727377580d507a",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/sales/cancel/{id}": {
+            "post": {
+                "tags": [
+                    "sales"
+                ],
+                "summary": "Canel sale",
+                "operationId": "40cc5110d7e303bcd1dfa55a5b084284",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/schedules": {
+            "get": {
+                "tags": [
+                    "schedules"
+                ],
+                "summary": "Get all schedules",
+                "operationId": "af0b9a2b25ef36248514f865c392a5d1",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "schedules"
+                ],
+                "summary": "Add schedules",
+                "operationId": "aebe5c1058e542c74615732b6c3b9f0f",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/schedules/{id}": {
+            "get": {
+                "tags": [
+                    "schedules"
+                ],
+                "summary": "Get schedules",
+                "operationId": "6fbf02862bdbbf22504fafa8b204afdc",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "schedules"
+                ],
+                "summary": "Update schedules",
+                "operationId": "4c279651026a64cbbce8be66901a368a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "schedules"
+                ],
+                "summary": "Delete schedules",
+                "operationId": "02722861f15c4245a808a81b4b467a0f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/users/paginate": {
+            "post": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get users per paginate",
+                "operationId": "902f8d3517b60f3eaa2a31976bc02630",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/users": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get users",
+                "operationId": "45fc269b0725cafc1d4e444a1ace24cd",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Add user",
+                "operationId": "cd5b7f6094357054fd47d26c639d5a20",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/users/{id}": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get user",
+                "operationId": "07d3371dd63aa623efeabe8e127f3e8d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Update user",
+                "operationId": "b9091397c8b25f12c6adb74be6ce3a5a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Delete user",
+                "operationId": "e169ebcc01eeee2f5e57e5bfc064bc7f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/login": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Inicio de sesion",
+                "operationId": "88fb1ab5562c1e39e235ca64ec165e85",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "username": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "username": "user",
+                                    "password": "123"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                }
+            }
+        },
+        "/api/auth/register": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Registra usuario",
+                "description": "Display a listing of the resource.\nMostramos el listado de los regitros solicitados.",
+                "operationId": "152213d7f0a47c7d92a1fcf73ab3a328",
+                "responses": {
+                    "200": {
+                        "description": "Valida existencia de usuario."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "responses": {
+            "200": {
+                "description": "Valida existencia de usuario."
+            },
+            "default": {
+                "description": "Ha ocurrido un error."
+            }
+        },
+        "parameters": {
+            "id": {
+                "name": "id",
+                "in": "query",
+                "description": "",
+                "required": true
+            }
+        },
+        "securitySchemes": {
+            "bearer_token": {
+                "type": "apiKey",
+                "description": "Enter token in format (Bearer <token>)",
+                "name": "Authorization",
+                "in": "header"
+            }
+        }
+    }
+}

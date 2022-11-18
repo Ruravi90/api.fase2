@@ -34,8 +34,8 @@ class CreatePackage extends Migration
             $table->increments('id');
             $table->integer('package_id')->unsigned();
             $table->foreign('package_id')->references('id')->on('packages');
-            $table->integer('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('users');
+            //$table->integer('user_id')->unsigned();
+            $table->foreignId('user_id')->nullable()->references('id')->on('users');
             $table->boolean('is_taken');
             $table->string('description');
             $table->dateTime('scheduled_date');
