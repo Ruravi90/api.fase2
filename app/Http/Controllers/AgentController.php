@@ -44,17 +44,10 @@ class AgentController extends Controller
         $user->motherlastname = $request->get('motherlastname');
         $user->email = "agent@Appspa.com.mx";
         $user->initials = $request->get('initials');
-
-        //$utilities =new Utilities();
-        //$password = $utilities->generate_password();
-        //$user->password = bcrypt($password);
+        $user->profile = $request->get('profile');
+        $user->password = bcrypt($request->get('password'));
 
         $user->save();
-
-        //$roles = Role::where('slug','agent')->first();
-        //$user->assignRole($roles->id);
-
-        //$user->save();
 
 		return ['success' => true];
 	}
@@ -89,12 +82,12 @@ class AgentController extends Controller
 		$user->motherlastname = $request->get('motherlastname');
         $user->email = $request->get('email');
         $user->initials = $request->get('initials');
-        $user->revokeAllRoles();
-		$user->save();
 
-        //$roles = Role::where('slug','agent')->first();
-        //$user->assignRole($roles->id);
-        //$user->save();
+        if($request->has('reset_password')){
+            $user->password = bcrypt($request->get('reset_password'));
+        }
+
+		$user->save();
 
     	return ['success' => true];
     }
@@ -144,9 +137,7 @@ class AgentController extends Controller
      * )
      */
     public function getAll(){
-        //$roles = Role::where('slug','agent')->with('users')->first();
-        //$agents = $roles->users;
-        $agents = User::all();
+        $agents = User::where("profile","agent")->get();
 		return response($agents, 200)->header('Content-Type', 'application/json');
     }
 

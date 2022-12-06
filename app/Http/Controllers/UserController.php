@@ -74,12 +74,7 @@ class UserController extends Controller
         $user->email = 'usuario@fase2spa.com.mx';
         $user->initials = $request->get('initials');
         $user->password = bcrypt($user->username.'1');
-        $user->save();
-
-        foreach ($request->input("roles") as $key => $value) {
-           $user->assignRole($value["id"]);
-        }
-
+        $user->profile = $request->get('profile');
         $user->save();
 
 		return response()->json([
@@ -117,17 +112,13 @@ class UserController extends Controller
 		$user->motherlastname = $request->has('motherlastname') ? $request->get('motherlastname') : '';
         //$user->email = $request->get('email');
         $user->initials = $request->get('initials');
+        $user->profile = $request->get('profile');
 
         if($request->has('reset_password')){
               $user->password = bcrypt($request->get('reset_password'));
         }
 
-        $user->roles()->sync([]);
 		$user->save();
-        foreach ($request->input("roles") as $key => $value) {
-           $user->assignRole($value["id"]);
-        }
-        $user->save();
     	return ['success' => true];
     }
 
@@ -176,10 +167,8 @@ class UserController extends Controller
      * )
      */
     public function getAll(){
-        //$role = Role::where('slug','agent')->get()->first();
-        //$roleUser = RoleUser::where('role_id',$role->id)->select('user_id')->get();
-        //$user = User::whereNotIn('id',$roleUser)->get();
-        return response( 200)->header('Content-Type', 'application/json');
+        $user = User::where('profile','!=' ,"agent")->get();
+        return response($user, 200)->header('Content-Type', 'application/json');
     }
 
 
@@ -206,7 +195,7 @@ class UserController extends Controller
      * )
      */
     public function find($id){
-        $user = User::with('roles')->find($id);
+        $user = User::find($id);
         return response($user, 200)->header('Content-Type', 'application/json');
     }
 
@@ -266,6 +255,14 @@ class UserController extends Controller
         }
 
         return response([
+                'claims'=> [
+                    'id'         => auth()->user()->id,
+                    'username'   => auth()->user()->username,
+                    'name'       => auth()->user()->name,
+                    'lastname'   => auth()->user()->last_name,
+                    'profile'    => auth()->user()->profile,
+                    'initials'   => auth()->user()->initials,
+                ],
                 'token' => $token,
                 'type' => 'bearer',
             ])->header('Content-Type', 'application/json');
@@ -304,6 +301,7 @@ class UserController extends Controller
         $token = \Tymon\JWTAuth\Facades\JWTAuth::fromUser($user);
 
         return response([
+            'profile' => $input['profile'],
             'token' => $token,
             'type' => 'bearer',
         ])->header('Content-Type', 'application/json');

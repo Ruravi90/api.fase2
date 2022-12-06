@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-//use App\User;
 
 class CatProduct extends Model
 {
@@ -17,7 +16,7 @@ class CatProduct extends Model
 	}
 
 	public function inventory(){
-		return $this->hasMany('App\ProductInventory','product_id');
+		return $this->hasMany('App\Models\ProductInventory','product_id');
 	}
 
 	public function delete()
