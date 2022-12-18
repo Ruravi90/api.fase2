@@ -11,7 +11,6 @@ use App\Http\Controllers\AgentController;
 use App\Http\Controllers\CatReferenceController;
 use App\Http\Controllers\CatPackageController;
 use App\Http\Controllers\CatProductController;
-use App\Http\Controllers\CatPillController;
 use App\Http\Controllers\CatServiceController;
 use App\Http\Controllers\CatTypeSalesController;
 use App\Http\Controllers\CatExpensesController;
@@ -19,7 +18,6 @@ use App\Http\Controllers\CatConceptController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SaleAdditionalController;
 use App\Http\Controllers\ProductInventoryController;
-use App\Http\Controllers\PillInventoryController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\PackageController;
@@ -126,15 +124,6 @@ Route::group(['middleware' => 'jwt.verify'], function ($router) {//
         Route::post('/cat_products/paginate', 'getPaginate');
         Route::put('/cat_products/{id}', 'update');
         Route::delete('/cat_products/{id}', 'delete');
-    });
-
-    Route::controller(CatPillController::class)->group(function () {
-        Route::get('/cat_pills', 'getAll');
-        Route::get('/cat_pills/{id}', 'find');
-        Route::post('/cat_pills', 'add');
-        Route::post('/cat_pills/paginate', 'getPaginate');
-        Route::put('/cat_pills/{id}', 'update');
-        Route::delete('/cat_pills/{id}', 'delete');
     });
 
     Route::controller(CatServiceController::class)->group(function () {

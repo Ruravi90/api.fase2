@@ -91,7 +91,7 @@ class CatPackageController extends Controller
      * )
      */
     public function find($id){
-        $package = CatPackage::with(['complements','complements.cat_product','complements.cat_pill'])->find($id);
+        $package = CatPackage::with(['complements','complements.cat_product'])->find($id);
         return response($package, 200)->header('Content-Type', 'application/json');
     }
 /**
@@ -125,8 +125,6 @@ class CatPackageController extends Controller
 
                 if(isset($_complement['product_id']))
                     $complement->product_id = $_complement['product_id'];
-                if(isset($_complement['pill_id']))
-                    $complement->pill_id = $_complement['pill_id'];
 
                 $complement->save();
             }
@@ -175,8 +173,6 @@ class CatPackageController extends Controller
 
             if(isset($_complement['product_id']))
                 $complement->product_id = $_complement['product_id'];
-            if(isset($_complement['pill_id']))
-                $complement->pill_id = $_complement['pill_id'];
 
             $complement->save();
         }

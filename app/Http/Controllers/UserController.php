@@ -302,7 +302,14 @@ class UserController extends Controller
         $token = JWTAuth::fromUser($user);
 
         return response([
-            'profile' => $input['profile'],
+            'claims'=> [
+                'id'         => auth()->user()->id,
+                'username'   => auth()->user()->username,
+                'name'       => auth()->user()->name,
+                'lastname'   => auth()->user()->last_name,
+                'profile'    => auth()->user()->profile,
+                'initials'   => auth()->user()->initials,
+            ],
             'token' => $token,
             'type' => 'bearer',
         ])->header('Content-Type', 'application/json');

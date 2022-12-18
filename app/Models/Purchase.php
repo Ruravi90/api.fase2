@@ -22,10 +22,6 @@ class Purchase extends Model
 		return $this->hasOne(User::class,'id', 'user_id');
 	}
 
-    public function cat_pill(){
-		return $this->hasOne(CatPill::class,'id', 'pill_id');
-	}
-
 	public function cat_product(){
 		return $this->hasOne(CatProduct::class,'id', 'product_id');
 	}

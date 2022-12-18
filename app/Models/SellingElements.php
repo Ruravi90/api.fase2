@@ -16,9 +16,6 @@ class SellingElements extends Model
 	public function package(){
 		return $this->belongsTo(CatPackage::class);
 	}
-	public function pill(){
-		return $this->belongsTo(CatPill::class);
-	}
 	public function product(){
 		return $this->belongsTo(CatProduct::class);
 	}

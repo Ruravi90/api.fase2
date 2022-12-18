@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Package;
 use App\Models\CatPackage;
-use App\Models\PillInventory;
 use App\Models\ProductInventory;
 use App\Models\PackageTracking;
 
@@ -48,11 +47,6 @@ class PackageTrackingController extends Controller
                 ->find($package->type->id);
 
         foreach ($catPackage->complements as $_complement){
-            if($_complement["pill_id"] != null){
-                $pillInventory = PillInventory::where('pill_id',$_complement["pill_id"])->first();
-                $pillInventory->count = ((int)$pillInventory->count - (int)$_complement["count"]);
-                $pillInventory->save();
-            }
             if($_complement["product_id"] != null){
                 $productInventory = ProductInventory::where('product_id',$_complement["product_id"])->first();
                 $productInventory->count = ((int)$productInventory->count - (int)$_complement["count"]);

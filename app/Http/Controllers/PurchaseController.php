@@ -6,9 +6,7 @@ use App\Models\Purchase;
 use Illuminate\Http\Request;
 use App\Models\CatExpense;
 use App\Models\CatConcept;
-use App\Models\CatPill;
 use App\Models\CatProduct;
-use App\Models\PillInventory;
 use App\Models\ProductInventory;
 use App\Models\Log;
 
@@ -39,7 +37,7 @@ class PurchaseController extends Controller
         }
 
 		$purchase = Purchase::with(['user','purchases'=>function($query){
-			$query->with(['department','provider','cat_expense','cat_concept','cat_pill','cat_product']);
+			$query->with(['department','provider','cat_expense','cat_concept','cat_product']);
 		}])
 		->where('purchase_id',null);
 
@@ -74,7 +72,7 @@ class PurchaseController extends Controller
      */
 	public function getAll(){
 		$purchases = Purchase::with(['user','purchases'=>function($query){
-			$query->with(['department','provider','cat_expense','cat_concept','cat_pill','cat_product']);
+			$query->with(['department','provider','cat_expense','cat_concept','cat_product']);
 		}])
 		->where('purchase_id',null)
 		->get();
@@ -84,7 +82,7 @@ class PurchaseController extends Controller
 	public function getPending(Request $request){
 		$isPaid = $request->get('is_paid');
 		$purchases = Purchase::with(['user','purchases'=>function($query){
-			$query->with(['department','provider','cat_expense','cat_concept','cat_pill','cat_product']);
+			$query->with(['department','provider','cat_expense','cat_concept','cat_product']);
 		}])
 		->where('purchase_id',null)
 		->where('is_paid',false)
@@ -116,7 +114,7 @@ class PurchaseController extends Controller
      */
 	public function find($id){
 		$purchases = Purchase::with(['user','purchases'=>function($query){
-			$query->with(['department','provider','cat_expense','cat_concept','cat_pill','cat_product']);
+			$query->with(['department','provider','cat_expense','cat_concept','cat_product']);
 		}])->find($id);
 		return response($purchases, 200)->header('Content-Type', 'application/json');
 	}
@@ -193,32 +191,6 @@ class PurchaseController extends Controller
         $purchase->expence_id = $expense->id;
         $purchase->concept_id = $concept->id;
 		$purchase->count = 0;
-
-		$pill = null;
-		if(isset($_purchase['name_pill'])){
-			$pill = new CatPill;
-			$pill->name = $_purchase['name_pill'];
-			$pill->price = 0;
-			$pill->save();
-		}
-		else if (isset($_purchase['pill_id']))
-			$pill = CatPill::find($_purchase['pill_id']);
-
-        if($pill != null){
-			$purchase->pill_id = $pill->id;
-			$purchase->count = $_purchase['pill_count'];
-			$pillInventary = PillInventory::where('pill_id',$pill->id)->first();
-			if($pillInventary != null){
-				$pillInventary->count = ($pillInventary->count + $purchase->count);
-			}
-			else{
-				$pillInventary = new PillInventory;
-				$pillInventary->pill_id = $pill->id;
-				$pillInventary->count = ($pillInventary->count + $purchase->count);
-			}
-
-			$pillInventary->save();
-		}
 
 		$product = null;
 		if(isset($_purchase['name_product'])){
