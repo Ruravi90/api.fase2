@@ -11,7 +11,7 @@ class Client extends Model
 
 	public function address(){
         //return $this->hasMany(Address::class);
-        return $this->hasMany('App\Address', 'client_id');
+        return $this->hasMany(Address::class, 'client_id');
 		//return $this->belongsTo(Address::class);
 	}
 

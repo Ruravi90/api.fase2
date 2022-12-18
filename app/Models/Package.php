@@ -22,7 +22,7 @@ class Package extends Model
 	}
 
 	public function type(){
-		return $this->hasOne('App\CatPackage','id', 'cat_package_id');
+		return $this->hasOne(CatPackage::class,'id', 'cat_package_id');
 	}
 
 	public function tracking(){

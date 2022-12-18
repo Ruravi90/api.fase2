@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Role;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use \Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends Controller
 {
@@ -245,7 +246,7 @@ class UserController extends Controller
     public function apiLogin(Request $request){
 
         $credentials = $request->only('username', 'password');
-        $token = \Tymon\JWTAuth\Facades\JWTAuth::attempt($credentials);
+        $token = JWTAuth::attempt($credentials);
 
         if(!$token){
             return response([
@@ -298,7 +299,7 @@ class UserController extends Controller
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
-        $token = \Tymon\JWTAuth\Facades\JWTAuth::fromUser($user);
+        $token = JWTAuth::fromUser($user);
 
         return response([
             'profile' => $input['profile'],
@@ -306,5 +307,15 @@ class UserController extends Controller
             'type' => 'bearer',
         ])->header('Content-Type', 'application/json');
 
+    }
+
+    public function apiLogout(Request $request) {
+
+        JWTAuth::getToken(); // Ensures token is already loaded.
+        JWTAuth::invalidate(true);
+
+        return response([
+            'logout' => true,
+        ])->header('Content-Type', 'application/json');
     }
 }

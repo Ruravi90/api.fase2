@@ -6,7 +6,6 @@ use App\Models\Department;
 use App\Models\Package;
 use App\Models\CatPackage;
 use App\Models\Payment;
-use App\Models\PillInventory;
 use App\Models\ProductInventory;
 use App\Models\SaleAdditional;
 use Carbon\Carbon;
@@ -39,7 +38,7 @@ class SaleController extends Controller
      */
 	public function getAll() {
 		$sale = Sale::where('primary_id',null)->with(['department','client','sales'=>function($query){
-			$query->with(['department','client', 'responsible', 'type', 'cat_package', 'cat_service', 'cat_pill', 'cat_product']);
+			$query->with(['department','client', 'responsible', 'type', 'cat_package', 'cat_service', 'cat_product']);
 		}])->get();
 		return response($sale, 200)->header('Content-Type', 'application/json');
 	}
@@ -83,7 +82,6 @@ class SaleController extends Controller
                     'sales.department',
                     'sales.cat_package',
                     'sales.cat_service',
-                    'sales.cat_pill',
                     'sales.type',
                     'sales.cat_product',
                     'sales.payments'])
@@ -105,7 +103,6 @@ class SaleController extends Controller
 					'sales.department',
 					'sales.cat_package',
 					'sales.cat_service',
-					'sales.cat_pill',
 					'sales.type',
 					'sales.cat_product',
 					'sales.payments'])
@@ -135,7 +132,6 @@ class SaleController extends Controller
                     'sales.department',
                     'sales.cat_package',
                     'sales.cat_service',
-                    'sales.cat_pill',
                     'sales.type',
                     'sales.cat_product',
                     'sales.payments'])
@@ -181,7 +177,6 @@ class SaleController extends Controller
 			'sales.type',
 			'sales.cat_package',
 			'sales.cat_service',
-			'sales.cat_pill',
 			'sales.cat_product')
 		->find($id);
 
@@ -216,7 +211,6 @@ class SaleController extends Controller
 			'sales',
 			'sales.cat_package',
 			'sales.cat_service',
-			'sales.cat_pill',
 			'sales.type',
 			'sales.cat_product')
 		->where('primary_id', null)
@@ -255,7 +249,6 @@ class SaleController extends Controller
 			'sales',
 			'sales.cat_package',
 			'sales.cat_service',
-			'sales.cat_pill',
 			'sales.type',
 			'sales.cat_product',
 			'sales.payments'=>function($query){
@@ -302,7 +295,6 @@ class SaleController extends Controller
 			$q->with([
 				'cat_package',
 				'cat_service',
-				'cat_pill',
 				'cat_product',
 				'type',
 				'payments',
@@ -397,7 +389,6 @@ class SaleController extends Controller
 			$q->with([
 				'cat_package',
 				'cat_service',
-				'cat_pill',
 				'cat_product',
 				'type',
 				'payments',
@@ -477,11 +468,12 @@ class SaleController extends Controller
      */
 	public function add(Request $request){
 		$primary = new Sale;
-		$primary->department_id = 0;//$request->get('sales')[0]['department_id'];
+		$primary->department_id = $request->get('sales')[0]['department_id'];
 		$primary->responsible_id = $request->get('sales')[0]['responsible_id'];
 		$primary->client_id = $request->get('sales')[0]['client_id'];
 		$primary->user_id = $request->get('sales')[0]['user_id'];
-		$primary->type_sale_id = 0;
+		$primary->type_sale_id = $request->get('sales')[0]['type_sale_id'];
+
 		$primary->balance = 0;
 		$primary->price = 0;
 		$primary->amount = 0;
@@ -523,8 +515,6 @@ class SaleController extends Controller
 				$sale->service_id = $_sale['service_id'];
 			if(isset($_sale['package_id']))
 				$sale->package_id = $_sale['package_id'];
-			if(isset($_sale['pill_id']))
-				$sale->pill_id = $_sale['pill_id'];
 
 			$sale->save();
 
@@ -550,12 +540,6 @@ class SaleController extends Controller
 
 			}
 
-			if(isset($_sale['pill_id'])){
-				$pillInventory = PillInventory::where('pill_id',$_sale['pill_id'])->first();
-				$pillInventory->count = ($pillInventory->count - $sale->count );
-				$pillInventory->save();
-			}
-
 			if(isset($_sale['product_id'])){
 				$productInventory = ProductInventory::where('product_id',$_sale['product_id'])->first();
 				$productInventory->count = ($productInventory->count - $sale->count );
@@ -565,13 +549,6 @@ class SaleController extends Controller
 			foreach ($_sale['additionals'] as $_additional) {
 				$additional = new SaleAdditional;
 				$additional->sale_id = $sale->id;
-
-				if(isset($_additional['pill_id'])){
-					$additional->pill_id = $_additional['pill_id'];
-					$pillInventory = PillInventory::where('pill_id',$_additional["pill_id"])->first();
-					$pillInventory->count = ($pillInventory->count - $_additional["count"]);
-					$pillInventory->save();
-				}
 
 				if(isset($_additional['product_id'])){
 					$additional->product_id = $_additional['product_id'];

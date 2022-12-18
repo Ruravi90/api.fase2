@@ -13,36 +13,32 @@ class Sale extends Model
     protected $table = "sales";
 
 	public function client(){
-		return $this->hasOne('App\Client','id', 'client_id');
+		return $this->hasOne(Client::class,'id', 'client_id');
 	}
 	public function department(){
-		return $this->hasOne('App\Department','id', 'department_id');
+		return $this->hasOne(Department::class,'id', 'department_id');
 	}
 	public function user(){
-		return $this->hasOne('App\User','id', 'user_id');
+		return $this->hasOne(User::class,'id', 'user_id');
 	}
 	public function responsible(){
-		return $this->hasOne('App\User','id', 'responsible_id');
+		return $this->hasOne(User::class,'id', 'responsible_id');
 	}
 	public function type(){
-		return $this->hasOne('App\CatTypeSale','id', 'type_sale_id');
+		return $this->hasOne(CatTypeSale::class,'id', 'type_sale_id');
 	}
 	public function cat_package(){
-		return $this->hasOne('App\CatPackage','id', 'package_id');
+		return $this->hasOne(CatPackage::class,'id', 'package_id');
 	}
 	public function cat_service(){
-		return $this->hasOne('App\CatService','id', 'service_id');
-	}
-	public function cat_pill(){
-		return $this->hasOne('App\CatPill','id', 'pill_id');
+		return $this->hasOne(CatService::class,'id', 'service_id');
 	}
 	public function cat_product(){
-		return $this->hasOne('App\CatProduct','id', 'product_id');
+		return $this->hasOne(CatProduct::class,'id', 'product_id');
 	}
 	public function sale(){
-		return $this->hasOne('App\Sale','id', 'primary_id');
+		return $this->hasOne(Sale::class,'id', 'primary_id');
 	}
-
 	public function sales(){
 		return $this->hasMany(Sale::class, 'primary_id');
 	}

@@ -16,7 +16,7 @@ class CatProduct extends Model
 	}
 
 	public function inventory(){
-		return $this->hasMany('App\Models\ProductInventory','product_id');
+		return $this->hasMany(ProductInventory::class,'product_id');
 	}
 
 	public function delete()

@@ -18,7 +18,7 @@ class CatPackage extends Model
 	}
 
 	public function complements(){
-		return $this->hasMany('App\Models\PackageComplement','package_id');
+		return $this->hasMany(PackageComplement::class,'package_id');
 	}
 
 	public function delete()

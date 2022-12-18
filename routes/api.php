@@ -88,6 +88,8 @@ Route::group(['middleware' => 'jwt.verify'], function ($router) {//
         Route::post('/users', 'add');
         Route::put('/users/{id}', 'update');
         Route::delete('/users/{id}', 'delete');
+
+        Route::post('/auth/logout', 'apiLogout');
     });
 
     Route::controller(AgentController::class)->group(function () {

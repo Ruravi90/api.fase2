@@ -11,31 +11,31 @@ class Purchase extends Model
 	//protected $fillable = ['business_name','contact_name','office_phone','email'];
 
     public function department(){
-		return $this->hasOne('App\Department','id', 'department_id');
+		return $this->hasOne(Department::class,'id', 'department_id');
 	}
 
 	public function provider(){
-		return $this->hasOne('App\Provider','id', 'provider_id');
+		return $this->hasOne(Provider::class,'id', 'provider_id');
 	}
 
 	public function user(){
-		return $this->hasOne('App\User','id', 'user_id');
+		return $this->hasOne(User::class,'id', 'user_id');
 	}
 
     public function cat_pill(){
-		return $this->hasOne('App\CatPill','id', 'pill_id');
+		return $this->hasOne(CatPill::class,'id', 'pill_id');
 	}
 
 	public function cat_product(){
-		return $this->hasOne('App\CatProduct','id', 'product_id');
+		return $this->hasOne(CatProduct::class,'id', 'product_id');
 	}
 
 	public function cat_expense(){
-		return $this->hasOne('App\CatExpense','id', 'expence_id');
+		return $this->hasOne(CatExpense::class,'id', 'expence_id');
 	}
 
 	public function cat_concept(){
-		return $this->hasOne('App\CatConcept','id', 'concept_id');
+		return $this->hasOne(CatConcept::class,'id', 'concept_id');
 	}
 
 	public function purchases(){
