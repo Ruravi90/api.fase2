@@ -13,7 +13,6 @@ class CreateComplementsPackage extends Migration
      */
     public function up()
     {
-        Schema::dropIfExists('complements_packages');
         Schema::create('complements_packages', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('package_id')->nullable()->unsigned();
@@ -28,8 +27,8 @@ class CreateComplementsPackage extends Migration
         });
 
         Schema::table('cat_packages', function (Blueprint $table) {
-            $table->dropForeign(['pill_id']);
             $table->dropForeign(['product_id']);
+            $table->dropForeign(['pill_id']);
             $table->dropColumn(['product_id','product_count','pill_id','pill_count']);
         });
     }

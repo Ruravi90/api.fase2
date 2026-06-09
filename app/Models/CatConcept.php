@@ -11,7 +11,7 @@ class CatConcept extends Model
 	//protected $fillable = ['name','last_name','mother_last_name','email'];
 
 	public function purchases(){
-		return $this->hasMany(Purchase::class);
+		return $this->hasMany(Purchase::class); 
 	}
 
 	public function delete()
@@ -19,3 +19,8 @@ class CatConcept extends Model
         return parent::delete();
     }
 }
+
+
+
+
+

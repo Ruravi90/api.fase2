@@ -1,7 +1,7 @@
 <?php
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
-//use App\User;
+//use App\Models\User;
 
 class Client extends Model
 {
@@ -11,7 +11,7 @@ class Client extends Model
 
 	public function address(){
         //return $this->hasMany(Address::class);
-        return $this->hasMany('App\Address', 'client_id');
+        return $this->hasMany('App\Models\Address', 'client_id');
 		//return $this->belongsTo(Address::class);
 	}
 
@@ -27,10 +27,10 @@ class Client extends Model
     public function sales(){
         return $this->hasMany(Sale::class);
     }
-
+    
 	public function delete()
     {
-        // delete all related address
+        // delete all related address 
         $this->address()->delete();
         $this->schedules()->delete();
         // as suggested by Dirk in comment,
@@ -41,3 +41,8 @@ class Client extends Model
         return parent::delete();
     }
 }
+
+
+
+
+

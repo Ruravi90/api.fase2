@@ -16,3 +16,8 @@ class PillInventory extends Model
         return parent::delete();
     }
 }
+
+
+
+
+

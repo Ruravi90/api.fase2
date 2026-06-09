@@ -31,17 +31,17 @@ class BoxController extends Controller
 		$json = array();
 		$count = 0;
 
-		foreach ($departaments as $_departmanet){
+		foreach ($departaments as $_departmanet){ 
 			$catExpenses = CatExpense::all();
 
 			$json[$count]['dateStart'] = $start->toDateTimeString();
 			$json[$count]['dateEnd'] = $end->toDateTimeString();
 
 			$json[$count]['name'] = $_departmanet->name;
-
+			
 			$subCount = 0;
 			$expenses = array();
-			foreach ($catExpenses as $catExpense){
+			foreach ($catExpenses as $catExpense){ 
 				$expenses[$subCount]['name'] = $catExpense->name;
 
 				$expenseTotal = Purchase::where('department_id',$_departmanet->id)
@@ -52,10 +52,10 @@ class BoxController extends Controller
 				->sum('amount');
 
 				$expenses[$subCount]['total']  = intval($expenseTotal);
-
+				
 				$subCount++;
 			}
-
+			
 			$json[$count]['expenses'] = $expenses;
 
 			$purchaseTotal = Purchase::where('department_id',$_departmanet->id)
@@ -86,10 +86,10 @@ class BoxController extends Controller
 
 			$count++;
 		}
-
+		
 		return response()->json($json);
 	}
-
+	
 	public function getSalesChart(Request $request){
 		$isPaid = true;
 		if($request->has('isPaid'))
@@ -101,11 +101,11 @@ class BoxController extends Controller
 		switch($request->get('time')){
 			case'y':
 				$json = $json->select(DB::raw('count(id) as sales'), DB::raw("DATE_FORMAT(created_at, '%Y') as date"));
-
+			
 				break;
 			default;
 				$json = $json->select(DB::raw('count(id) as sales'), DB::raw("DATE_FORMAT(created_at, '%m-%Y') as date"));
-
+			
 				$nowYear = date('Y-m-d' . ' 00:00:00');
 				$oldYear = date('Y-m-d' . ' 00:00:00',strtotime('-1 years'));
 				$json = $json->whereBetween('created_at', array($oldYear , $nowYear));
@@ -116,7 +116,7 @@ class BoxController extends Controller
 
     	return response()->json($json);
 	}
-
+	
 	public function getSalesForPackageChart(Request $request){
 		$isPaid = true;
 		if($request->has('isPaid'))
@@ -133,7 +133,7 @@ class BoxController extends Controller
 				break;
 			default;
 				$json = $json->select(DB::raw('count(id) as sales,package_id'), DB::raw("DATE_FORMAT(created_at, '%m-%Y') as date"));
-
+				
 				$nowYear = date('Y-m-d' . ' 00:00:00');
 				$oldYear = date('Y-m-d' . ' 00:00:00',strtotime('-1 years'));
 				$json = $json->whereBetween('created_at', array($oldYear , $nowYear));
@@ -141,10 +141,10 @@ class BoxController extends Controller
 		}
 
 		$json = $json->groupby('package_id','date')->get();
-
+		
     	return response()->json($json);
 	}
-
+	
 	public function getSalesForServiceChart(Request $request){
 		$isPaid = true;
 		if($request->has('isPaid'))
@@ -161,7 +161,7 @@ class BoxController extends Controller
 				break;
 			default;
 				$json = $json->select(DB::raw('count(id) as sales,service_id'), DB::raw("DATE_FORMAT(created_at, '%m-%Y') as date"));
-
+				
 				$nowYear = date('Y-m-d' . ' 00:00:00');
 				$oldYear = date('Y-m-d' . ' 00:00:00',strtotime('-1 years'));
 				$json = $json->whereBetween('created_at', array($oldYear , $nowYear));
@@ -169,7 +169,7 @@ class BoxController extends Controller
 		}
 
 		$json = $json->groupby('service_id','date')->get();
-
+		
     	return response()->json($json);
     }
 }

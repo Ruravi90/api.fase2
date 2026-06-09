@@ -14,8 +14,8 @@ class UpdatePackages extends Migration
     public function up()
     {
         Schema::table('sales',function(Blueprint $table){
-             //$table->integer('responsible_id')->nullable()->unsigned();
-             $table->foreignId('responsible_id')->nullable()->references('id')->on('users');
+             $table->integer('responsible_id')->nullable()->unsigned();
+             $table->foreign('responsible_id')->references('id')->on('users');
         });
 
         Schema::table('cat_packages',function(Blueprint $table){
@@ -41,7 +41,8 @@ class UpdatePackages extends Migration
         });
 
         Schema::table('cat_packages', function (Blueprint $table) {
-            $table->dropForeign(['product_id','pill_id']);
+            $table->dropForeign(['product_id']);
+            $table->dropForeign(['pill_id']);
             $table->dropColumn(['product_id','product_count','pill_id','pill_count']);
         });
     }

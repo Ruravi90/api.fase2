@@ -11,19 +11,24 @@ class Payment extends Model
 	//protected $fillable = ['name','last_name','mother_last_name','email'];
 
 	public function user(){
-		return $this->hasOne('App\User','id', 'user_id');
+		return $this->hasOne('App\Models\User','id', 'user_id');
 	}
 	public function responsible(){
-		return $this->hasOne('App\User','id', 'responsible_id');
+		return $this->hasOne('App\Models\User','id', 'responsible_id');
 	}
 	public function type(){
-		return $this->hasOne('App\CatTypeSale','id', 'type_sale_id');
+		return $this->hasOne('App\Models\CatTypeSale','id', 'type_sale_id');
 	}
 	public function sale(){
-		return $this->hasOne('App\Sale','id', 'sale_id');
+		return $this->hasOne('App\Models\Sale','id', 'sale_id');
 	}
 	public function delete()
     {
         return parent::delete();
     }
 }
+
+
+
+
+

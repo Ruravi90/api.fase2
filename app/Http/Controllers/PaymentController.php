@@ -3,53 +3,24 @@
 namespace App\Http\Controllers;
 use App\Models\Payment;
 use App\Models\Sale;
+use App\Models\CatPackage;
+use App\Models\PillInventory;
+use App\Models\ProductInventory;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
-    /**
-     * @OA\Get(
-     *     path="/api/payments",
-     *     tags={"payments"},
-     *     summary="Get all payment",
-     *     security={{"bearer_token":{}}},
-     *     @OA\Response(
-     *         response=200,
-     *         description="Valida existencia de usuario."
-     *     ),
-     *     @OA\Response(
-     *         response="default",
-     *         description="Ha ocurrido un error."
-     *     )
-     * )
-     */
+    public function index()
+	{
+		return view('payment.index');
+	}
+
 	public function getAll(){
         $payments = Payment::with('user')->get();
         return response($payments, 200)->header('Content-Type', 'application/json');
     }
 
-    /**
-     * @OA\Get(
-     *     path="/api/payments/{id}",
-     *     tags={"payments"},
-     *     summary="Get payment",
-     *     security={{"bearer_token":{}}},
-     *     @OA\Parameter(
-     *        name="id",
-     *        in="query",
-     *        description="",
-     *        required=true,
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Valida existencia de usuario."
-     *     ),
-     *     @OA\Response(
-     *         response="default",
-     *         description="Ha ocurrido un error."
-     *     )
-     * )
-     */
     public function find($id){
         $payments = Payment::with(
             "responsible",
@@ -67,28 +38,6 @@ class PaymentController extends Controller
         return response($payments, 200)->header('Content-Type', 'application/json');
     }
 
-    /**
-     * @OA\Get(
-     *     path="/api/payments/for_sale/{id}",
-     *     tags={"payments"},
-     *     summary="Get payment per sale",
-     *     security={{"bearer_token":{}}},
-     *     @OA\Parameter(
-     *        name="id",
-     *        in="query",
-     *        description="",
-     *        required=true,
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Valida existencia de usuario."
-     *     ),
-     *     @OA\Response(
-     *         response="default",
-     *         description="Ha ocurrido un error."
-     *     )
-     * )
-     */
     public function forSaleId($id){
         $payments = Payment::with(
             "responsible",
@@ -106,22 +55,6 @@ class PaymentController extends Controller
         return response($payments, 200)->header('Content-Type', 'application/json');
     }
 
-    /**
-     * @OA\Post(
-     *     path="/api/payments",
-     *     tags={"payments"},
-     *     summary="Delete payment",
-     *     security={{"bearer_token":{}}},
-     *     @OA\Response(
-     *         response=200,
-     *         description="Valida existencia de usuario."
-     *     ),
-     *     @OA\Response(
-     *         response="default",
-     *         description="Ha ocurrido un error."
-     *     )
-     * )
-     */
     public function add(Request $request)
     {
         $payment = new Payment;
@@ -137,7 +70,7 @@ class PaymentController extends Controller
         $sale->amount = ($sale->amount + $payment->amount);
 
         $balance = Payment::where('sale_id',$sale->id)->sum('amount');
-
+       
         $sale->balance = ($sale->total - $balance);
 
         if( $sale->balance == 0)
@@ -152,7 +85,7 @@ class PaymentController extends Controller
 
         $primary->total = $total;
         $primary->balance = ($total - $balance);
-
+        
 		if($primary->balance == 0)
 			$primary->is_paid = 1;
 		else
@@ -164,61 +97,17 @@ class PaymentController extends Controller
         return response($payment,200)->header('Content-Type', 'application/json');
     }
 
-    /**
-     * @OA\Update(
-     *     path="/api/payments/{id}",
-     *     tags={"payments"},
-     *     summary="Update payment",
-     *     security={{"bearer_token":{}}},
-     *     @OA\Parameter(
-     *        name="id",
-     *        in="query",
-     *        description="",
-     *        required=true,
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Valida existencia de usuario."
-     *     ),
-     *     @OA\Response(
-     *         response="default",
-     *         description="Ha ocurrido un error."
-     *     )
-     * )
-     */
-    public function update(Request $request)
+    public function update($id, Request $request)
     {
-        $payment              = Payment::find($request->input("id"));
+        $payment              = Payment::find($id);
         $payment->amount        = $request->input("amount");
         $payment->sale_id        = $request->input("sale_id");
         $payment->save();
         return response($payment, 200)->header('Content-Type', 'application/json');
     }
 
-    /**
-     * @OA\Delete(
-     *     path="/api/payments/{id}",
-     *     tags={"payments"},
-     *     summary="Delete payment",
-     *     security={{"bearer_token":{}}},
-     *     @OA\Parameter(
-     *        name="id",
-     *        in="query",
-     *        description="",
-     *        required=true,
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Valida existencia de usuario."
-     *     ),
-     *     @OA\Response(
-     *         response="default",
-     *         description="Ha ocurrido un error."
-     *     )
-     * )
-     */
     public function delete($id)
-    {
+    {   
         $payment = Payment::find($id);
         $payment->delete();
         return ['success' => true];

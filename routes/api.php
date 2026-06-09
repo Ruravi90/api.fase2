@@ -1,52 +1,42 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\ScheduleController;
-use App\Http\Controllers\ClientController;
-use App\Http\Controllers\ProviderController;
-use App\Http\Controllers\CreditorController;
 use App\Http\Controllers\AgentController;
-use App\Http\Controllers\CatReferenceController;
+use App\Http\Controllers\BoxController;
+use App\Http\Controllers\DatabaseBackupController;
+use App\Http\Controllers\CatConceptController;
+use App\Http\Controllers\CatExpensesController;
 use App\Http\Controllers\CatPackageController;
-use App\Http\Controllers\CatProductController;
 use App\Http\Controllers\CatPillController;
+use App\Http\Controllers\CatProductController;
+use App\Http\Controllers\CatReferenceController;
 use App\Http\Controllers\CatServiceController;
 use App\Http\Controllers\CatTypeSalesController;
-use App\Http\Controllers\CatExpensesController;
-use App\Http\Controllers\CatConceptController;
-use App\Http\Controllers\SaleController;
-use App\Http\Controllers\SaleAdditionalController;
-use App\Http\Controllers\ProductInventoryController;
-use App\Http\Controllers\PillInventoryController;
-use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ClientController;
+use App\Http\Controllers\CreditorController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\PackageTrackingController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\PillInventoryController;
+use App\Http\Controllers\ProductInventoryController;
+use App\Http\Controllers\ProviderController;
 use App\Http\Controllers\PurchaseController;
-use App\Http\Controllers\BoxController;
+use App\Http\Controllers\QueueController;
+use App\Http\Controllers\RolController;
+use App\Http\Controllers\SaleAdditionalController;
+use App\Http\Controllers\SaleController;
+use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-
-Route::controller(UserController::class)->group(function(){
-    Route::post('/auth/register', 'apiRegister');
-    Route::post('/auth/login', 'apiLogin');
+Route::middleware('guest')->group(function () {
+    Route::post('/users/login', [UserController::class, 'apiLogin']);
+    Route::post('/users/register', [UserController::class, 'apiRegister']);
+    Route::get('/queue', [QueueController::class, 'index']);
 });
 
-//Route::get('/queue', 'QueueController@index');
-
-Route::group(['middleware' => 'jwt.verify'], function ($router) {//
-
+Route::middleware('auth:api')->group(function () {
     Route::controller(ScheduleController::class)->group(function () {
         Route::get('/schedules', 'getAll');
         Route::get('/schedules/{id}', 'find');
@@ -97,6 +87,22 @@ Route::group(['middleware' => 'jwt.verify'], function ($router) {//
         Route::post('/agents', 'add');
         Route::put('/agents/{id}', 'update');
         Route::delete('/agents/{id}', 'delete');
+    });
+
+    Route::controller(RolController::class)->group(function () {
+        Route::get('/roles', 'getAll');
+        Route::get('/roles/{id}', 'find');
+        Route::post('/roles', 'add');
+        Route::put('/roles/{id}', 'update');
+        Route::delete('/roles/{id}', 'delete');
+    });
+
+    Route::controller(PermissionController::class)->group(function () {
+        Route::get('/permissions', 'getAll');
+        Route::get('/permissions/{id}', 'find');
+        Route::post('/permissions', 'add');
+        Route::put('/permissions/{id}', 'update');
+        Route::delete('/permissions/{id}', 'delete');
     });
 
     Route::controller(CatReferenceController::class)->group(function () {
@@ -200,6 +206,15 @@ Route::group(['middleware' => 'jwt.verify'], function ($router) {//
         Route::delete('/products_inventory/{id}', 'delete');
     });
 
+    Route::controller(PillInventoryController::class)->group(function () {
+        Route::get('/pills_inventory', 'getAll');
+        Route::get('/pills_inventory/{id}', 'find');
+        Route::get('/pills_inventory/pill/{id}', 'forPill');
+        Route::post('/pills_inventory', 'add');
+        Route::put('/pills_inventory/{id}', 'update');
+        Route::delete('/pills_inventory/{id}', 'delete');
+    });
+
     Route::controller(PaymentController::class)->group(function () {
         Route::get('/payments', 'getAll');
         Route::get('/payments/{id}', 'find');
@@ -252,8 +267,9 @@ Route::group(['middleware' => 'jwt.verify'], function ($router) {//
         Route::post('/box/sales_chart', 'getSalesChart');
         Route::post('/box/sales_package', 'getSalesForPackageChart');
         Route::post('/box/sales_service', 'getSalesForServiceChart');
-        Route::post('/box/sales_service', 'getSalesForServiceChart');
     });
-
 });
 
+Route::get('/backup/database', [DatabaseBackupController::class, 'form']);
+Route::post('/backup/database', [DatabaseBackupController::class, 'create']);
+Route::post('/backup/database/migrate', [DatabaseBackupController::class, 'backupAndMigrate']);

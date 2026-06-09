@@ -1,7 +1,7 @@
 <?php
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
-//use App\User;
+//use App\Models\User;
 
 class Creditor extends Model
 {
@@ -16,8 +16,13 @@ class Creditor extends Model
 
 	public function delete()
     {
-    	// delete all related address
-        $this->address()->delete();
+    	// delete all related address 
+        $this->address()->delete(); 
         return parent::delete();
     }
 }
+
+
+
+
+

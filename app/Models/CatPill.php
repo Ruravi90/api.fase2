@@ -9,11 +9,11 @@ class CatPill extends Model
 	//protected $fillable = ['name','price'];
 
 	public function sales(){
-		return $this->hasMany(Sale::class);
+		return $this->hasMany(Sale::class); 
 	}
 
 	public function inventory(){
-		return $this->hasMany('App\PillInventory','pill_id');
+		return $this->hasMany('App\Models\PillInventory','pill_id');
 	}
 
 	public function delete()
@@ -21,3 +21,8 @@ class CatPill extends Model
         return parent::delete();
     }
 }
+
+
+
+
+

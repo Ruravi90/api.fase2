@@ -13,3 +13,8 @@ class Log extends Model
         return parent::delete();
     }
 }
+
+
+
+
+

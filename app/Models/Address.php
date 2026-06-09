@@ -1,7 +1,7 @@
 <?php
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
-//use App\User;
+//use App\Models\User;
 
 class Address extends Model
 {
@@ -24,4 +24,9 @@ class Address extends Model
         return parent::delete();
     }
 }
+
+
+
+
+
 

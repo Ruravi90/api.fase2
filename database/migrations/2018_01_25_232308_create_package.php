@@ -34,8 +34,8 @@ class CreatePackage extends Migration
             $table->increments('id');
             $table->integer('package_id')->unsigned();
             $table->foreign('package_id')->references('id')->on('packages');
-            //$table->integer('user_id')->unsigned();
-            $table->foreignId('user_id')->nullable()->references('id')->on('users');
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users');
             $table->boolean('is_taken');
             $table->string('description');
             $table->dateTime('scheduled_date');
@@ -51,13 +51,16 @@ class CreatePackage extends Migration
     public function down()
     {
         Schema::table('package_tracking',function(Blueprint $table){
-             $table->dropForeign(['package_id','user_id']);
+             $table->dropForeign(['package_id']);
+             $table->dropForeign(['user_id']);
         });
 
         Schema::dropIfExists('package_tracking');
 
         Schema::table('packages',function(Blueprint $table){
-             $table->dropForeign(['sale_id','client_id','cat_package_id']);
+             $table->dropForeign(['sale_id']);
+             $table->dropForeign(['client_id']);
+             $table->dropForeign(['cat_package_id']);
         });
 
         Schema::dropIfExists('packages');

@@ -14,8 +14,8 @@ class TablePayment extends Migration
     public function up()
     {
         Schema::table('payments', function (Blueprint $table) {
-            //$table->integer('responsible_id')->unsigned();
-            $table->foreignId('responsible_id')->nullable()->references('id')->on('users');
+            $table->integer('responsible_id')->unsigned();
+            $table->foreign('responsible_id')->references('id')->on('users');
             $table->integer('type_sale_id')->unsigned();
             $table->foreign('type_sale_id')->references('id')->on('cat_type_sales');
         });
@@ -29,7 +29,8 @@ class TablePayment extends Migration
     public function down()
     {
         Schema::table('payments',function(Blueprint $table){
-             $table->dropForeign(['responsible_id','type_sale_id']);
+             $table->dropForeign(['responsible_id']);
+             $table->dropForeign(['type_sale_id']);
              $table->dropColumn(['responsible_id','type_sale_id']);
         });
     }

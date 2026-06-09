@@ -40,7 +40,10 @@ class TableSales extends Migration
     public function down()
     {
         Schema::table('sales',function(Blueprint $table){
-            $table->dropForeign(['product_id','pill_id','package_id','service_id']);
+            $table->dropForeign(['product_id']);
+            $table->dropForeign(['pill_id']);
+            $table->dropForeign(['package_id']);
+            $table->dropForeign(['service_id']);
             $table->dropColumn(['discount','description','product_id','pill_id','package_id','service_id']);
         });
     }

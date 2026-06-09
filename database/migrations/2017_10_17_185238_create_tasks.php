@@ -19,8 +19,8 @@ class CreateTasks extends Migration
             $table->string('description')->nullable();
             $table->dateTime('date')->default(date("Y-m-d H:i:s"));;
             $table->boolean('is_completed')->default(false);
-            //$table->integer('user_id')->unsigned();
-            $table->foreignId('user_id')->nullable()->references('id')->on('users');
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

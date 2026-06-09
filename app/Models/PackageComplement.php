@@ -11,15 +11,15 @@ class PackageComplement extends Model
 	//protected $fillable = ['name','last_name','mother_last_name','email'];
 
     public function cat_package(){
-		return $this->hasOne('App\CatPackage','id', 'package_id');
+		return $this->hasOne('App\Models\CatPackage','id', 'package_id');
 	}
 
 	public function cat_pill(){
-		return $this->hasOne('App\CatPill','id', 'pill_id');
+		return $this->hasOne('App\Models\CatPill','id', 'pill_id');
 	}
 
 	public function cat_product(){
-		return $this->hasOne('App\CatProduct','id', 'product_id');
+		return $this->hasOne('App\Models\CatProduct','id', 'product_id');
 	}
 
 	public function delete()
@@ -27,3 +27,8 @@ class PackageComplement extends Model
         return parent::delete();
     }
 }
+
+
+
+
+

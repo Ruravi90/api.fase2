@@ -11,7 +11,7 @@ class ProductInventory extends Model
 	//protected $fillable = ['name','last_name','mother_last_name','email'];
 
 	public function product(){
-		return $this->belongsTo(CatProduct::class);
+		return $this->belongsTo(CatProduct::class); 
 	}
 
 	public function delete()
@@ -19,3 +19,8 @@ class ProductInventory extends Model
         return parent::delete();
     }
 }
+
+
+
+
+

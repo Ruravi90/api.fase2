@@ -1,7 +1,7 @@
 <?php
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
-//use App\User;
+//use App\Models\User;
 
 class Provider extends Model
 {
@@ -16,8 +16,13 @@ class Provider extends Model
 
 	public function delete()
     {
-        // delete all related address
+        // delete all related address 
         $this->address()->delete();
         return parent::delete();
     }
 }
+
+
+
+
+

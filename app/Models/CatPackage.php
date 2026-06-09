@@ -1,14 +1,14 @@
 <?php
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
-//use App\User;
+//use App\Models\User;
 
 class CatPackage extends Model
 {
 	protected $table = "cat_packages";
 
 	protected $fillable = ['name','price','session_count'];
-
+	
 	public function sales(){
 		return $this->hasMany(Sale::class);
 	}
@@ -18,7 +18,7 @@ class CatPackage extends Model
 	}
 
 	public function complements(){
-		return $this->hasMany('App\PackageComplement','package_id');
+		return $this->hasMany('App\Models\PackageComplement','package_id');
 	}
 
 	public function delete()
@@ -26,3 +26,8 @@ class CatPackage extends Model
         return parent::delete();
     }
 }
+
+
+
+
+

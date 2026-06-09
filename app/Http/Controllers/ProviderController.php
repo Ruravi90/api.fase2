@@ -12,74 +12,41 @@ use App\Http\Requests\ProviderRequest;
 */
 class ProviderController extends Controller
 {
+	/**
+	 * @Return view
+	 *
+	*/
+	public function index()
+	{
+		return view('provider.index');
+	}
+
     /**
-     * @OA\Get(
-     *     path="/api/providers",
-     *     tags={"provides"},
-     *     summary="Get all providers",
-     *     security={{"bearer_token":{}}},
-     *     @OA\Response(
-     *         response=200,
-     *         description="Valida existencia de usuario."
-     *     ),
-     *     @OA\Response(
-     *         response="default",
-     *         description="Ha ocurrido un error."
-     *     )
-     * )
-     */
+	 * Client controller
+	 *
+	*/
 	public function getAll(){
 		$providers =  Provider::all();
 		return response($providers, 200)->header('Content-Type', 'application/json');
 	}
 	/**
-     * @OA\Get(
-     *     path="/api/providers/{id}",
-     *     tags={"provides"},
-     *     summary="Get provider",
-     *     security={{"bearer_token":{}}},
-     *     @OA\Parameter(
-     *        name="id",
-     *        in="query",
-     *        description="",
-     *        required=true,
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Valida existencia de usuario."
-     *     ),
-     *     @OA\Response(
-     *         response="default",
-     *         description="Ha ocurrido un error."
-     *     )
-     * )
-     */
+	 * Client controller
+	 *
+	*/
 	public function find($id){
 		$provider = Provider::with('address')->find($id);
 		return response($provider, 200)->header('Content-Type', 'application/json');
 	}
 	/**
-     * @OA\Post(
-     *     path="/api/providers",
-     *     tags={"provides"},
-     *     summary="Add provider",
-     *     security={{"bearer_token":{}}},
-     *     @OA\Response(
-     *         response=200,
-     *         description="Valida existencia de usuario."
-     *     ),
-     *     @OA\Response(
-     *         response="default",
-     *         description="Ha ocurrido un error."
-     *     )
-     * )
-     */
-	public function add(Request $request){
+	 * Client controller 
+	 *
+	*/
+	public function add(ProviderRequest $request){
 		$provider = new Provider;
 		$provider->business_name = $request->get('business_name');
 		$provider->contact_name = $request->get('contact_name');
 		$provider->office_phone = $request->get('office_phone');
-		$provider->email = $request->get('email');
+		$provider->email = $request->get('email'); 
 		$provider->save();
 
 		if($request->get('street') != null){
@@ -97,28 +64,10 @@ class ProviderController extends Controller
 		return response($provider, 200)->header('Content-Type', 'application/json');
 	}
 	/**
-     * @OA\Put(
-     *     path="/api/providers/{id}",
-     *     tags={"provides"},
-     *     summary="Update provider",
-     *     security={{"bearer_token":{}}},
-     *     @OA\Parameter(
-     *        name="id",
-     *        in="query",
-     *        description="",
-     *        required=true,
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Valida existencia de usuario."
-     *     ),
-     *     @OA\Response(
-     *         response="default",
-     *         description="Ha ocurrido un error."
-     *     )
-     * )
-     */
-    public function update($id,Request $request){// se envia el id a $client
+	 * Client controller
+	 *
+	*/
+    public function update($id,ProviderRequest $request){// se envia el id a $client 
     	$provider = Provider::find($id);
     	$provider->business_name = $request->get('business_name');
     	$provider->contact_name = $request->get('contact_name');
@@ -153,28 +102,10 @@ class ProviderController extends Controller
     	return response($provider, 200)->header('Content-Type', 'application/json');
     }
 	/**
-     * @OA\Delete(
-     *     path="/api/providers/{id}",
-     *     tags={"provides"},
-     *     summary="Delete provider",
-     *     security={{"bearer_token":{}}},
-     *     @OA\Parameter(
-     *        name="id",
-     *        in="query",
-     *        description="",
-     *        required=true,
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Valida existencia de usuario."
-     *     ),
-     *     @OA\Response(
-     *         response="default",
-     *         description="Ha ocurrido un error."
-     *     )
-     * )
-     */
-    public function delete($id){// se envia el id a $client
+	 * Client controller
+	 *
+	*/
+    public function delete($id){// se envia el id a $client 
     	$provider = Provider::find($id);
     	$provider->delete();
     	return response(['success' => true],200)->header('Content-Type', 'application/json');

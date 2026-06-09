@@ -1,7 +1,7 @@
 <?php
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
-//use App\User;
+//use App\Models\User;
 
 class CatService extends Model
 {
@@ -19,3 +19,8 @@ class CatService extends Model
         return parent::delete();
     }
 }
+
+
+
+
+

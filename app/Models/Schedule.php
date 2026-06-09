@@ -1,7 +1,7 @@
 <?php
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
-//use App\User;
+//use App\Models\User;
 
 class Schedule extends Model
 {
@@ -10,7 +10,7 @@ class Schedule extends Model
 	//protected $fillable = ['name','last_name','mother_last_name','email'];
 
 	public function client(){
-		return $this->belongsTo(Client::class);
+		return $this->belongsTo(Client::class); 
 	}
 
 	public function delete()
@@ -18,3 +18,8 @@ class Schedule extends Model
         return parent::delete();
     }
 }
+
+
+
+
+

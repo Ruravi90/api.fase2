@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Purchase;
 use Illuminate\Http\Request;
+use App\Models\Purchase;
 use App\Models\CatExpense;
 use App\Models\CatConcept;
 use App\Models\CatPill;
@@ -11,33 +11,31 @@ use App\Models\CatProduct;
 use App\Models\PillInventory;
 use App\Models\ProductInventory;
 use App\Models\Log;
+use Illuminate\Support\Facades\Auth;
 
 class PurchaseController extends Controller
 {
-	/**
-     * @OA\Post(
-     *     path="/api/purchases/paginate",
-     *     tags={"purchases"},
-     *     summary="Get purchase per paginate",
-     *     security={{"bearer_token":{}}},
-     *     @OA\Response(
-     *         response=200,
-     *         description="Valida existencia de usuario."
-     *     ),
-     *     @OA\Response(
-     *         response="default",
-     *         description="Ha ocurrido un error."
-     *     )
-     * )
-     */
+	public function index()
+	{
+		return view('purchase.index');
+	}
+
+	public function pendingIndex()
+	{
+		return view('purchase_pending.index');
+	}
+
+
+	 // Api rest
+
 	public function getPaginate(Request $request) {
 		//per_page
-
+		
 		$perPage = 15;
 		if($request->has('perPage')){
 			$perPage = $request->get('perPage');
         }
-
+        
 		$purchase = Purchase::with(['user','purchases'=>function($query){
 			$query->with(['department','provider','cat_expense','cat_concept','cat_pill','cat_product']);
 		}])
@@ -48,7 +46,7 @@ class PurchaseController extends Controller
 			->orderBy('created_at', 'desc')->paginate($perPage);
 		}
 		else {
-			$from = date('Y-m-d' . ' 00:00:00', time());
+			$from = date('Y-m-d' . ' 00:00:00', time()); 
 			$purchase = $purchase->where('created_at','>=',$from)
 			->orderBy('created_at', 'desc')->paginate($perPage);
 		}
@@ -56,22 +54,6 @@ class PurchaseController extends Controller
 		return response($purchase, 200)->header('Content-Type', 'application/json');
 	}
 
-    /**
-     * @OA\Get(
-     *     path="/api/purchases",
-     *     tags={"purchases"},
-     *     summary="Get all purchases",
-     *     security={{"bearer_token":{}}},
-     *     @OA\Response(
-     *         response=200,
-     *         description="Valida existencia de usuario."
-     *     ),
-     *     @OA\Response(
-     *         response="default",
-     *         description="Ha ocurrido un error."
-     *     )
-     * )
-     */
 	public function getAll(){
 		$purchases = Purchase::with(['user','purchases'=>function($query){
 			$query->with(['department','provider','cat_expense','cat_concept','cat_pill','cat_product']);
@@ -92,52 +74,13 @@ class PurchaseController extends Controller
 		return response($purchases, 200)->header('Content-Type', 'application/json');
 	}
 
-    /**
-     * @OA\Get(
-     *     path="/api/purchases/{id}",
-     *     tags={"purchases"},
-     *     summary="Get purchase",
-     *     security={{"bearer_token":{}}},
-     *     @OA\Parameter(
-     *        name="id",
-     *        in="query",
-     *        description="",
-     *        required=true,
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Valida existencia de usuario."
-     *     ),
-     *     @OA\Response(
-     *         response="default",
-     *         description="Ha ocurrido un error."
-     *     )
-     * )
-     */
-	public function find($id){
+	public function find($id){ 
 		$purchases = Purchase::with(['user','purchases'=>function($query){
 			$query->with(['department','provider','cat_expense','cat_concept','cat_pill','cat_product']);
 		}])->find($id);
 		return response($purchases, 200)->header('Content-Type', 'application/json');
 	}
 
-
-    /**
-     * @OA\Post(
-     *     path="/api/purchases",
-     *     tags={"purchases"},
-     *     summary="Add purchase",
-     *     security={{"bearer_token":{}}},
-     *     @OA\Response(
-     *         response=200,
-     *         description="Valida existencia de usuario."
-     *     ),
-     *     @OA\Response(
-     *         response="default",
-     *         description="Ha ocurrido un error."
-     *     )
-     * )
-     */
 	public function add(Request $request){
 		//$currentuserid= Auth::user()->id;
 		$purchase = new Purchase;
@@ -163,7 +106,7 @@ class PurchaseController extends Controller
 			$purchase->save();
 		}
 
-		return response(["success" => "Ok","Purchase"=>$purchase], 200)->header('Content-Type', 'application/json');
+		return response(["success" => "Ok","Purchase"=>$purchase], 200)->header('Content-Type', 'application/json'); 
 	}
 
 
@@ -184,7 +127,7 @@ class PurchaseController extends Controller
 		}
 		else if (isset($_purchase['concept_id']))
 			$concept = CatConcept::find($_purchase['concept_id']);
-
+		
         $purchase = new Purchase;
 		$purchase->department_id = $_purchase['department_id'];
 		$purchase->provider_id = $_purchase['provider_id'];
@@ -219,7 +162,7 @@ class PurchaseController extends Controller
 
 			$pillInventary->save();
 		}
-
+		
 		$product = null;
 		if(isset($_purchase['name_product'])){
 			$product = new CatProduct;
@@ -229,7 +172,7 @@ class PurchaseController extends Controller
 		}
 		else if (isset($_purchase['product_id']))
 			$product = CatProduct::find($_purchase['product_id']);
-
+			
 		if($product != null){
 			$purchase->product_id = $product->id;
 			$purchase->count = $_purchase['product_count'];
@@ -251,59 +194,15 @@ class PurchaseController extends Controller
 		$purchase->save();
 	}
 
-    /**
-     * @OA\Put(
-     *     path="/api/purchases/{id}",
-     *     tags={"purchases"},
-     *     summary="Update purchase",
-     *     security={{"bearer_token":{}}},
-     *     @OA\Parameter(
-     *        name="id",
-     *        in="query",
-     *        description="",
-     *        required=true,
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Valida existencia de usuario."
-     *     ),
-     *     @OA\Response(
-     *         response="default",
-     *         description="Ha ocurrido un error."
-     *     )
-     * )
-     */
-    public function update($id,Request $request){// se envia el id a $client
+    public function update($id,Request $request){// se envia el id a $client 
 		$purchase = Purchase::find($id);
 		$purchase->product_id = $request->get('product_id');
 		$purchase->count = $request->get('count');
 		$purchase->save();
     	return response($purchase, 200)->header('Content-Type', 'application/json');
 	}
-
-    /**
-     * @OA\Post(
-     *     path="/api/purchases/pay/{id}",
-     *     tags={"purchases"},
-     *     summary="Pay purchase",
-     *     security={{"bearer_token":{}}},
-     *     @OA\Parameter(
-     *        name="id",
-     *        in="query",
-     *        description="",
-     *        required=true,
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Valida existencia de usuario."
-     *     ),
-     *     @OA\Response(
-     *         response="default",
-     *         description="Ha ocurrido un error."
-     *     )
-     * )
-     */
-	public function pay($id,Request $request){// se envia el id a $client
+	
+	public function pay($id,Request $request){// se envia el id a $client 
 		$purchase = Purchase::find($id);
 		$purchase->is_paid = $request->get('is_paid');
 		$purchase->save();
@@ -320,39 +219,21 @@ class PurchaseController extends Controller
 
     	return response($purchase, 200)->header('Content-Type', 'application/json');
 	}
-
-	 /**
-     * @OA\Post(
-     *     path="/api/purchases/cancel/{id}",
-     *     tags={"purchases"},
-     *     summary="Cancel purchase",
-     *     security={{"bearer_token":{}}},
-     *     @OA\Parameter(
-     *        name="id",
-     *        in="query",
-     *        description="",
-     *        required=true,
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Valida existencia de usuario."
-     *     ),
-     *     @OA\Response(
-     *         response="default",
-     *         description="Ha ocurrido un error."
-     *     )
-     * )
-     */
-	public function cancel($id,Request $request){// se envia el id a $client
-		$Purchase = Purchase::find($request->input("id"));
+	
+	/**
+	 * @param  Guard  $auth
+	 * @return void
+	*/
+	public function cancel($id,Request $request){// se envia el id a $client 
+		$Purchase = Purchase::find($_purchase->id); 
 		$userId = $request->get('user_id');
 
 		if($Purchase->primary_id == null && $Purchase->purchases()->count() > 0){
 			foreach ($Purchase->purchases() as $_purchase) {
-				$pur = Purchase::find($_purchase->id);
+				$pur = Purchase::find($_purchase->id); 
 				if($pur->product_id != null){
 					$productInventory = ProductInventory::where('product_id',$pur->product_id)->first();
-					$productInventory->count = ($productInventory->count - $_purchase->count );
+					$productInventory->count = ($productInventory->count - $purchase->count );
 					$productInventory->save();
 				}
 				$pur->is_cancel = 1;
@@ -387,28 +268,6 @@ class PurchaseController extends Controller
     	return response()->json(null, 204);
     }
 
-     /**
-     * @OA\Delete(
-     *     path="/api/purchases/{id}",
-     *     tags={"purchases"},
-     *     summary="Delete purchase",
-     *     security={{"bearer_token":{}}},
-     *     @OA\Parameter(
-     *        name="id",
-     *        in="query",
-     *        description="",
-     *        required=true,
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Valida existencia de usuario."
-     *     ),
-     *     @OA\Response(
-     *         response="default",
-     *         description="Ha ocurrido un error."
-     *     )
-     * )
-     */
     public function delete($id){
     	$purchase = Purchase::find($id);
 		$purchase->delete();

@@ -14,19 +14,19 @@ class Package extends Model
 	//protected $fillable = ['name','last_name','mother_last_name','email'];
 
 	public function client(){
-		return $this->belongsTo(Client::class);
+		return $this->belongsTo(Client::class); 
 	}
 
 	public function sale(){
-		return $this->belongsTo(Sale::class);
+		return $this->belongsTo(Sale::class); 
 	}
 
 	public function type(){
-		return $this->hasOne('App\CatPackage','id', 'cat_package_id');
+		return $this->hasOne('App\Models\CatPackage','id', 'cat_package_id');
 	}
 
 	public function tracking(){
-		return $this->hasMany(PackageTracking::class);
+		return $this->hasMany(PackageTracking::class); 
 	}
 
 	public function delete()
@@ -35,3 +35,8 @@ class Package extends Model
         return parent::delete();
     }
 }
+
+
+
+
+

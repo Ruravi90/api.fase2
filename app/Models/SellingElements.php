@@ -11,22 +11,27 @@ class SellingElements extends Model
 	//protected $fillable = ['name','price'];
 
 	public function sale(){
-		return $this->belongsTo(Sale::class);
+		return $this->belongsTo(Sale::class); 
 	}
 	public function package(){
-		return $this->belongsTo(CatPackage::class);
+		return $this->belongsTo(CatPackage::class); 
 	}
 	public function pill(){
-		return $this->belongsTo(CatPill::class);
+		return $this->belongsTo(CatPill::class); 
 	}
 	public function product(){
-		return $this->belongsTo(CatProduct::class);
+		return $this->belongsTo(CatProduct::class); 
 	}
 	public function service(){
-		return $this->belongsTo(CatService::class);
+		return $this->belongsTo(CatService::class); 
 	}
 	public function delete()
     {
         return parent::delete();
     }
 }
+
+
+
+
+

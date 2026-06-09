@@ -18,8 +18,8 @@ class CreatePayments extends Migration
             $table->float('amount', 8, 2);
             $table->integer('sale_id')->unsigned();
             $table->foreign('sale_id')->references('id')->on('sales');
-            //$table->integer('user_id')->unsigned();
-            $table->foreignId('user_id')->nullable()->references('id')->on('users');
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

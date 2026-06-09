@@ -11,11 +11,11 @@ class PackageTracking extends Model
 	//protected $fillable = ['name','last_name','mother_last_name','email'];
 
     public function package(){
-		return $this->belongsTo(Package::class);
+		return $this->belongsTo(Package::class); 
 	}
 
 	public function user(){
-		return $this->hasOne('App\User','id', 'user_id');
+		return $this->hasOne('App\Models\User','id', 'user_id');
 	}
 
 	public function delete()
@@ -23,3 +23,8 @@ class PackageTracking extends Model
         return parent::delete();
     }
 }
+
+
+
+
+
