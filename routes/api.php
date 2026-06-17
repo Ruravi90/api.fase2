@@ -267,6 +267,12 @@ Route::middleware('auth:api')->group(function () {
         Route::post('/box/sales_chart', 'getSalesChart');
         Route::post('/box/sales_package', 'getSalesForPackageChart');
         Route::post('/box/sales_service', 'getSalesForServiceChart');
+        Route::post('/box/dashboard_summary', 'getDashboardSummary');
+        Route::post('/box/sales_department', 'getSalesDepartmentChart');
+        Route::post('/box/payment_methods', 'getPaymentMethodsChart');
+        Route::post('/box/top_sellers', 'getTopSellers');
+        Route::get('/box/recent_activity', 'getRecentActivity');
+        Route::get('/box/alerts', 'getDashboardAlerts');
     });
 });
 
