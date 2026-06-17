@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Domains\Sales\Controllers;
+
+use App\Http\Controllers\Controller;
 use App\Models\Sale;
 use App\Models\SellingElements;
 use App\Models\Department;
@@ -19,10 +21,12 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Exception\HttpResponseException;
-use App\Http\Requests\SalePostRequest;
+use App\Domains\Sales\Requests\SalePostRequest;
+use App\Domains\Sales\Services\SaleService;
+use App\Domains\Sales\Queries\GetPaginatedSalesQuery;
+use App\Domains\Sales\Queries\GetCuteSalesQuery;
 use Illuminate\Support\Facades\DB;
 use App\Models\Log;
-
 
 /**
  * @resource Sale Management
@@ -49,58 +53,15 @@ class SaleController extends Controller
 		return response($sale, 200)->header('Content-Type', 'application/json');
 	}
 
-	public function getPaginate(Request $request)
+	public function getPaginate(Request $request, GetPaginatedSalesQuery $query)
 	{
 		$perPage = $request->get('perPage', 15);
 		$isPaid = $request->get('isPaid');
 
-		// Reutilizamos la definición de relaciones para evitar código repetido en el switch
-		$relations = [
-			'department',
-			'client',
-			'responsible',
-			'type',
-			'user',
-			'sales' => function ($q) use ($isPaid) {
-				$q->where('is_paid', $isPaid);
-			},
-			'sales.department',
-			'sales.cat_package',
-			'sales.cat_service',
-			'sales.cat_pill',
-			'sales.type',
-			'sales.cat_product',
-			'sales.payments'
-		];
-
-		switch ($isPaid) {
-			case 0:
-				$sales = Sale::with($relations)
-					->where('primary_id', null)
-					->where('is_paid', 0)
-					->where('is_cancel', 0)
-					->orderBy('updated_at', 'desc')->paginate($perPage);
-				break;
-			case 1:
-				$sales = Sale::with($relations)
-					->where('primary_id', null)
-					->orderBy('updated_at', 'desc')->paginate($perPage);
-				break;
-			case 2:
-				$sales = Sale::select('cute_date')
-					->groupBy('cute_date')
-					->where('is_cute', 1)
-					->orderBy('cute_date', 'desc')
-					->paginate($perPage);
-				break;
-			case 3:
-				$sales = Sale::with($relations)
-					->where('primary_id', null)
-					->where('is_cancel', 1)
-					->orderBy('updated_at', 'desc')->paginate($perPage);
-				break;
-			default:
-				return response()->json(['error' => 'Parámetro isPaid no válido'], 400);
+		try {
+			$sales = $query->execute($perPage, $isPaid);
+		} catch (\InvalidArgumentException $e) {
+			return response()->json(['error' => $e->getMessage()], 400);
 		}
 
 		return response($sales, 200)->header('Content-Type', 'application/json');
@@ -256,70 +217,10 @@ class SaleController extends Controller
 		return response($json, 200)->header('Content-Type', 'application/json');
 	}
 
-	public function getCuteSales(Request $request)
+	public function getCuteSales(Request $request, GetCuteSalesQuery $query)
 	{
 		$from = $request->get('date', Carbon::now()->toDateTimeString());
-		$dt = DateTime::createFromFormat('Y-m-d H:i:s', $from);
-		$start = Carbon::instance($dt)->startOfDay();
-		$end = Carbon::instance($dt);
-
-		$departments = Department::all()->toArray();
-
-		$group = Sale::with([
-			'client',
-			'responsible',
-			'sales' => function ($q) use ($start) {
-				$q->with([
-					'cat_package',
-					'cat_service',
-					'cat_pill',
-					'cat_product',
-					'type',
-					'payments' => function ($q2) use ($start) {
-						$q2->where('updated_at', '>=', $start->toDateTimeString());
-					},
-					'payments.type',
-				])->where('is_cancel', 0)
-					->where('updated_at', '>=', $start->toDateTimeString());
-			}
-		])
-			->where('primary_id', null)
-			->where('is_cute', 1)
-			->where('is_cancel', 0)
-			->where('cute_date', '=', $end->toDateTimeString())
-			->get();
-
-		$json = array();
-		$count = 0;
-
-		foreach ($departments as $_department) {
-			$json[$count] = $_department;
-			$jsonPrimary = array();
-			$countPrimary = 0;
-
-			foreach ($group as $_group) {
-				$jsonSales = array();
-				$countSales = 0;
-				foreach ($_group['sales'] as $sale) {
-					if ($_department['id'] == $sale['department_id'] && $sale['is_cancel'] == 0) {
-						$jsonSales[$countSales] = $sale;
-						$countSales++;
-					}
-				}
-
-				if (count($jsonSales) > 0 && $_group['is_cancel'] == 0) {
-					$jsonPrimary[$countPrimary]['sales'] = $jsonSales;
-					$jsonPrimary[$countPrimary]['client'] = $_group->client;
-					$jsonPrimary[$countPrimary]['responsible'] = $_group->responsible;
-					$countPrimary++;
-				}
-			}
-
-			if (count($jsonPrimary) > 0) {
-				$json[$count]['sales'] = $jsonPrimary;
-				$count++;
-			}
-		}
+		$json = $query->execute($from);
 
 		return response($json, 200)->header('Content-Type', 'application/json');
 	}
@@ -328,155 +229,14 @@ class SaleController extends Controller
 	 * REGISTRO DE VENTAS (MÉTODO CRÍTICO REFACTORIZADO)
 	 * Cambiado Request por SalePostRequest para asegurar data limpia.
 	 */
-	public function add(SalePostRequest $request)
+	public function add(SalePostRequest $request, SaleService $saleService)
 	{
-		// SOLUCIÓN EN TRANSACCIÓN: Todo o nada. Si falla el inventario o un guardado, se revierte todo de la BD.
-		$primarySale = DB::transaction(function () use ($request) {
-
-			$salesData = $request->get('sales');
-			if (empty($salesData)) {
-				throw new \Exception("No hay ventas para procesar", 400);
-			}
-
-			// Crear la cabecera/venta primaria
-			$primary = new Sale;
-			$primary->department_id = 0;
-			$primary->responsible_id = $salesData[0]['responsible_id'];
-			$primary->client_id = $salesData[0]['client_id'];
-			$primary->user_id = $salesData[0]['user_id'];
-			$primary->type_sale_id = 0;
-			$primary->balance = 0;
-			$primary->price = 0;
-			$primary->amount = 0;
-			$primary->count = 0;
-			$primary->is_paid = 0;
-			$primary->save();
-
-			foreach ($salesData as $_sale) {
-				// 1. CONTROL DE INVENTARIO PREVIO (Validación de Stock)
-				if (isset($_sale['pill_id'])) {
-					$pillInventory = PillInventory::where('pill_id', $_sale['pill_id'])->lockForUpdate()->first();
-					if (!$pillInventory || $pillInventory->count < $_sale['count']) {
-						throw new \Exception("Stock insuficiente para la pastilla ID: " . $_sale['pill_id'], 422);
-					}
-				}
-				if (isset($_sale['product_id'])) {
-					$productInventory = ProductInventory::where('product_id', $_sale['product_id'])->lockForUpdate()->first();
-					if (!$productInventory || $productInventory->count < $_sale['count']) {
-						throw new \Exception("Stock insuficiente para el producto ID: " . $_sale['product_id'], 422);
-					}
-				}
-
-				// Generar sub-venta
-				$sale = new Sale;
-				$sale->department_id = $_sale['department_id'];
-				$sale->responsible_id = $_sale['responsible_id'];
-				$sale->client_id = $_sale['client_id'];
-				$sale->user_id = $_sale['user_id'];
-				$sale->primary_id = $primary->id;
-				$sale->type_sale_id = $_sale['type_sale_id'];
-				$sale->count = $_sale['count'];
-				$sale->price = $_sale['price'];
-
-				$total = $_sale['price'] * $_sale['count'];
-				$discount = 0;
-
-				if (isset($_sale['discount'])) {
-					$sale->discount = $_sale['discount'];
-					$discount = (($sale->discount * $total) / 100);
-				}
-
-				$sale->total = $total - $discount;
-				$sale->amount = $_sale['amount'];
-				$sale->partial_payment = $_sale['amount'];
-				$sale->balance = ($sale->total - $sale->amount);
-				$sale->is_paid = ($sale->balance <= 0) ? 1 : 0;
-
-				if (isset($_sale['description']))
-					$sale->description = $_sale['description'];
-				if (isset($_sale['product_id']))
-					$sale->product_id = $_sale['product_id'];
-				if (isset($_sale['service_id']))
-					$sale->service_id = $_sale['service_id'];
-				if (isset($_sale['package_id']))
-					$sale->package_id = $_sale['package_id'];
-				if (isset($_sale['pill_id']))
-					$sale->pill_id = $_sale['pill_id'];
-
-				$sale->save();
-
-				// Registrar pago asociado
-				$payment = new Payment;
-				$payment->sale_id = $sale->id;
-				$payment->user_id = $sale->user_id;
-				$payment->responsible_id = $_sale['responsible_id'];
-				$payment->type_sale_id = $_sale['type_sale_id'];
-				$payment->amount = $_sale['amount'];
-				$payment->save();
-
-				// Si es paquete
-				if (isset($_sale['package_id'])) {
-					$package = new \fase2\Package; // Asumiendo uso de alias o ruta completa
-					$package->sale_id = $sale->id;
-					$package->client_id = $sale->client_id;
-					$package->cat_package_id = $_sale['package_id'];
-					$package->is_completed = false;
-					$package->save();
-				}
-
-				// SOLUCIÓN ATÓMICA DE INVENTARIO: Evita race conditions con decrement()
-				if (isset($_sale['pill_id'])) {
-					$pillInventory->decrement('count', $sale->count);
-				}
-				if (isset($_sale['product_id'])) {
-					$productInventory->decrement('count', $sale->count);
-				}
-
-				// Procesar adicionales
-				if (isset($_sale['additionals'])) {
-					foreach ($_sale['additionals'] as $_additional) {
-
-						if (isset($_additional['pill_id'])) {
-							$addPillInv = PillInventory::where('pill_id', $_additional['pill_id'])->lockForUpdate()->first();
-							if (!$addPillInv || $addPillInv->count < $_additional['count']) {
-								throw new \Exception("Stock insuficiente en adicionales para pastilla ID: " . $_additional['pill_id'], 422);
-							}
-							$addPillInv->decrement('count', $_additional['count']);
-						}
-
-						if (isset($_additional['product_id'])) {
-							$addProdInv = ProductInventory::where('product_id', $_additional['product_id'])->lockForUpdate()->first();
-							if (!$addProdInv || $addProdInv->count < $_additional['count']) {
-								throw new \Exception("Stock insuficiente en adicionales para producto ID: " . $_additional['product_id'], 422);
-							}
-							$addProdInv->decrement('count', $_additional['count']);
-						}
-
-						$additional = new SaleAdditional;
-						$additional->sale_id = $sale->id;
-						if (isset($_additional['pill_id']))
-							$additional->pill_id = $_additional['pill_id'];
-						if (isset($_additional['product_id']))
-							$additional->product_id = $_additional['product_id'];
-						$additional->count = $_additional['count'];
-						$additional->save();
-					}
-				}
-			}
-
-			// Totalizar la cabecera primaria de forma limpia al terminar el bucle
-			$totalSum = Sale::where('primary_id', $primary->id)->sum('total');
-			$amountSum = Sale::where('primary_id', $primary->id)->sum('amount');
-
-			$primary->total = $totalSum;
-			$primary->balance = ($totalSum - $amountSum);
-			$primary->is_paid = ($primary->balance <= 0) ? 1 : 0;
-			$primary->save();
-
-			return $primary;
-		});
-
-		return response($primarySale, 200)->header('Content-Type', 'application/json');
+		try {
+			$primarySale = $saleService->createSale($request->get('sales'));
+			return response($primarySale, 200)->header('Content-Type', 'application/json');
+		} catch (\Exception $e) {
+			return response()->json(['error' => $e->getMessage()], $e->getCode() ?: 500);
+		}
 	}
 
 	public function update($id, Request $request)

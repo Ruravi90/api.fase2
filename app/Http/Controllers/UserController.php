@@ -64,9 +64,10 @@ class UserController extends Controller
      */
     public function apiLogin(Request $request)
     {
-        if ($request->get('username') === '' || $request->get('password') === '') {
-            return response()->json(['error' => 'Unauthorised'], 401);
-        }
+        $request->validate([
+            'username' => ['required', 'string'],
+            'password' => ['required', 'string'],
+        ]);
 
         $user = User::where('username', $request->input('username'))->first();
 

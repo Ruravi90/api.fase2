@@ -25,7 +25,7 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\QueueController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\SaleAdditionalController;
-use App\Http\Controllers\SaleController;
+use App\Domains\Sales\Controllers\SaleController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
