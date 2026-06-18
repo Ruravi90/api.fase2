@@ -63,6 +63,22 @@ class PackageController extends Controller
         return response($package, 200)->header('Content-Type', 'application/json');
     }
 
+    public function activeForClient($clientId){
+        $packages = Package::with(['type', 'tracking'])
+            ->where('client_id', $clientId)
+            ->where('is_completed', 0)
+            ->get()
+            ->filter(function($package) {
+                // A package is active if it's not completed and has sessions left
+                $typeSessions = $package->type->session_count ?? 0;
+                $usedSessions = $package->tracking->count();
+                return $usedSessions < $typeSessions;
+            })
+            ->values();
+
+        return response($packages, 200)->header('Content-Type', 'application/json');
+    }
+
     public function isCompleted(Request $request){
         $package = Package::with(['client','type','sale','tracking','tracking.user'])
         ->where('is_completed',$request->get('isCompleted'))

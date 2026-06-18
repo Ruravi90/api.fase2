@@ -13,6 +13,14 @@ class Schedule extends Model
 		return $this->belongsTo(Client::class); 
 	}
 
+    public function package(){
+        return $this->belongsTo(Package::class, 'package_id');
+    }
+
+    public function tracking(){
+        return $this->hasOne(PackageTracking::class, 'schedule_id');
+    }
+
 	public function delete()
     {
         return parent::delete();

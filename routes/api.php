@@ -41,6 +41,7 @@ Route::middleware('auth:api')->group(function () {
         Route::get('/schedules', 'getAll');
         Route::get('/schedules/{id}', 'find');
         Route::post('/schedules', 'add');
+        Route::post('/schedules/{id}/check-in', 'checkIn');
         Route::put('/schedules/{id}', 'update');
         Route::delete('/schedules/{id}', 'delete');
     });
@@ -239,6 +240,8 @@ Route::middleware('auth:api')->group(function () {
         Route::post('/packages', 'add');
         Route::post('/packages/is_completed', 'isCompleted');
         Route::post('/packages/paginate', 'getPaginate');
+        Route::get('/clients/{id}/active-packages', 'activeForClient');
+        Route::get('/packages/completed', 'isCompleted');
         Route::put('/packages/{id}', 'update');
         Route::delete('/packages/{id}', 'delete');
     });

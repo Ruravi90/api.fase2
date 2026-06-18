@@ -18,6 +18,10 @@ class PackageTracking extends Model
 		return $this->hasOne('App\Models\User','id', 'user_id');
 	}
 
+    public function schedule(){
+        return $this->belongsTo(Schedule::class, 'schedule_id');
+    }
+
 	public function delete()
     {
         return parent::delete();
