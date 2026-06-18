@@ -5,10 +5,18 @@ use App\Models\Schedule;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Requests\ScheduleRequest;
-
+use App\Services\OpenWAService;
+use Carbon\Carbon;
 
 class ScheduleController extends Controller
 {
+    protected $whatsapp;
+
+    public function __construct(OpenWAService $whatsapp)
+    {
+        $this->whatsapp = $whatsapp;
+    }
+
     public function index(){
     	return view('home');
     }
@@ -24,6 +32,21 @@ class ScheduleController extends Controller
 		$schedule->allDay = $request->get('allDay');
 		$schedule->client_id = $request->get('client_id');
 		$schedule->save();
+
+        if ($schedule->client_id) {
+            $client = Client::find($schedule->client_id);
+            // El modelo de cliente usualmente tiene la propiedad 'phone'. Ajusta si se llama 'cellphone' u otro.
+            if ($client && $client->phone) {
+                $date = Carbon::parse($schedule->start)->locale('es');
+                $fecha = ucfirst($date->translatedFormat('l d \d\e F \d\e\l Y'));
+                $hora = $date->translatedFormat('h:i A');
+
+                $nombre = strtok($client->name, " "); // Primer nombre
+                $mensaje = "¡Hola *{$nombre}*! 🗓️\n\nConfirmamos tu cita en *Fase 2* para:\n*Servicio:* {$schedule->title}\n*Fecha:* {$fecha}\n*Hora:* {$hora}\n\nSi tienes alguna duda o necesitas reagendar, por favor contáctanos por esta misma vía. ¡Te esperamos! ✨";
+                $this->whatsapp->sendMessage($client->phone, $mensaje);
+            }
+        }
+
 		return ['success' => true]; 
 	}
 
@@ -37,6 +60,18 @@ class ScheduleController extends Controller
 		$schedule->allDay = $request->get('allDay'); 
 		$schedule->client_id = $request->get('client_id');
 		$schedule->save();
+
+        if ($schedule->client_id) {
+            $client = Client::find($schedule->client_id);
+            if ($client && $client->phone) {
+                $date = Carbon::parse($schedule->start)->locale('es');
+                $fechaHora = ucfirst($date->translatedFormat('l d \d\e F \d\e\l Y \a \l\a\s h:i A'));
+
+                $nombre = strtok($client->name, " ");
+                $mensaje = "¡Hola *{$nombre}*! 🔄\n\nTu cita en *Fase 2* ha sido actualizada.\nTu nuevo horario es: *{$fechaHora}*.";
+                $this->whatsapp->sendMessage($client->phone, $mensaje);
+            }
+        }
 
     	return ['success' => true]; 
     }

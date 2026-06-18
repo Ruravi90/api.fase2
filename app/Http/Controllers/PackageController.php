@@ -22,6 +22,15 @@ class PackageController extends Controller
         $packages = Package::with(['client','type','sale','tracking','tracking.user'])
         ->where('is_completed',$request->get('isCompleted'));
 
+        if($request->filled('search')) {
+            $search = $request->get('search');
+            $packages = $packages->whereHas('client', function($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%")
+                  ->orWhere('lastname', 'LIKE', "%{$search}%")
+                  ->orWhere('motherlastname', 'LIKE', "%{$search}%");
+            });
+        }
+
         $packages = $packages->orderBy('updated_at', 'desc');
         $packages = $packages->paginate($perPage);
 

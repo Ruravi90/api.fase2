@@ -121,58 +121,40 @@ class BoxController extends Controller
 	}
 	
 	public function getSalesForPackageChart(Request $request){
-		$isPaid = true;
-		if($request->has('isPaid'))
-			$isPaid = $request->get('isPaid');
+		$yearStart = Carbon::now()->startOfYear();
+		$yearEnd   = Carbon::now()->endOfYear();
 
 		$json = Sale::with('cat_package')
 		->where('primary_id','<>', null)
 		->where('package_id','<>', null)
-		->where('is_paid', $isPaid);
+		->where('is_paid', true)
+		->where('is_cancel', 0)
+		->whereBetween('created_at', [$yearStart, $yearEnd])
+		->select(DB::raw('count(id) as sales, package_id'))
+		->groupby('package_id')
+		->orderBy('sales', 'DESC')
+		->limit(5)
+		->get();
 
-		switch($request->get('time')){
-			case'y':
-				$json = $json->select(DB::raw('count(id) as sales,package_id'), DB::raw("DATE_FORMAT(created_at, '%Y') as date"));
-				break;
-			default;
-				$json = $json->select(DB::raw('count(id) as sales,package_id'), DB::raw("DATE_FORMAT(created_at, '%m-%Y') as date"));
-				
-				$nowYear = date('Y-m-d' . ' 00:00:00');
-				$oldYear = date('Y-m-d' . ' 00:00:00',strtotime('-1 years'));
-				$json = $json->whereBetween('created_at', array($oldYear , $nowYear));
-				break;
-		}
-
-		$json = $json->groupby('package_id','date')->get();
-		
     	return response()->json($json);
 	}
 	
 	public function getSalesForServiceChart(Request $request){
-		$isPaid = true;
-		if($request->has('isPaid'))
-			$isPaid = $request->get('isPaid');
+		$yearStart = Carbon::now()->startOfYear();
+		$yearEnd   = Carbon::now()->endOfYear();
 
 		$json = Sale::with('cat_service')
 		->where('primary_id','<>', null)
 		->where('service_id','<>', null)
-		->where('is_paid', $isPaid);
+		->where('is_paid', true)
+		->where('is_cancel', 0)
+		->whereBetween('created_at', [$yearStart, $yearEnd])
+		->select(DB::raw('count(id) as sales, service_id'))
+		->groupby('service_id')
+		->orderBy('sales', 'DESC')
+		->limit(5)
+		->get();
 
-		switch($request->get('time')){
-			case'y':
-				$json = $json->select(DB::raw('count(id) as sales,service_id'), DB::raw("DATE_FORMAT(created_at, '%Y') as date"));
-				break;
-			default;
-				$json = $json->select(DB::raw('count(id) as sales,service_id'), DB::raw("DATE_FORMAT(created_at, '%m-%Y') as date"));
-				
-				$nowYear = date('Y-m-d' . ' 00:00:00');
-				$oldYear = date('Y-m-d' . ' 00:00:00',strtotime('-1 years'));
-				$json = $json->whereBetween('created_at', array($oldYear , $nowYear));
-				break;
-		}
-
-		$json = $json->groupby('service_id','date')->get();
-		
     	return response()->json($json);
     }
 
@@ -263,56 +245,67 @@ class BoxController extends Controller
 	}
 
 	public function getRecentActivity(Request $request){
+		$page    = max(1, intval($request->query('page', 1)));
+		$perPage = max(5, min(50, intval($request->query('per_page', 8))));
+		$limit   = $perPage * $page + 10; // fetch a bit more to detect has_more
+
 		$sales = Sale::with('client', 'cat_service', 'cat_package', 'cat_product')
 		->where('primary_id','<>', null)
 		->orderBy('created_at', 'DESC')
-		->limit(5)
+		->limit($limit)
 		->get()
 		->map(function($sale) {
 			$concept = $sale->cat_service ? $sale->cat_service->name : ($sale->cat_package ? $sale->cat_package->name : ($sale->cat_product ? $sale->cat_product->name : 'Venta'));
 			return [
-				'type' => 'sale',
-				'title' => 'Venta registrada',
+				'type'        => 'sale',
+				'title'       => 'Venta registrada',
 				'description' => ($sale->client ? $sale->client->name . ' ' . $sale->client->lastname : 'Cliente') . ' - ' . $concept,
-				'amount' => intval($sale->amount),
-				'created_at' => $sale->created_at,
+				'amount'      => intval($sale->amount),
+				'created_at'  => $sale->created_at,
 			];
 		});
 
 		$payments = Payment::with('type', 'sale.client')
 		->orderBy('created_at', 'DESC')
-		->limit(5)
+		->limit($limit)
 		->get()
 		->map(function($payment) {
 			return [
-				'type' => 'payment',
-				'title' => 'Pago recibido',
+				'type'        => 'payment',
+				'title'       => 'Pago recibido',
 				'description' => ($payment->sale && $payment->sale->client ? $payment->sale->client->name . ' ' . $payment->sale->client->lastname : 'Venta') . ' - ' . ($payment->type ? $payment->type->name : 'Metodo de pago'),
-				'amount' => intval($payment->amount),
-				'created_at' => $payment->created_at,
+				'amount'      => intval($payment->amount),
+				'created_at'  => $payment->created_at,
 			];
 		});
 
 		$purchases = Purchase::with('provider')
 		->orderBy('created_at', 'DESC')
-		->limit(5)
+		->limit($limit)
 		->get()
 		->map(function($purchase) {
 			return [
-				'type' => 'purchase',
-				'title' => 'Compra registrada',
+				'type'        => 'purchase',
+				'title'       => 'Compra registrada',
 				'description' => $purchase->provider ? $purchase->provider->business_name : ($purchase->name_product ?: 'Compra'),
-				'amount' => intval($purchase->amount),
-				'created_at' => $purchase->created_at,
+				'amount'      => intval($purchase->amount),
+				'created_at'  => $purchase->created_at,
 			];
 		});
 
-		$activity = $sales->merge($payments)->merge($purchases)
-		->sortByDesc('created_at')
-		->values()
-		->take(8);
+		$all = $sales->merge($payments)->merge($purchases)
+			->sortByDesc('created_at')
+			->values();
 
-		return response()->json($activity);
+		$offset   = ($page - 1) * $perPage;
+		$pageData = $all->slice($offset, $perPage)->values();
+		$hasMore  = $all->count() > $offset + $perPage;
+
+		return response()->json([
+			'data'     => $pageData,
+			'has_more' => $hasMore,
+			'page'     => $page,
+		]);
 	}
 
 	public function getDashboardAlerts(Request $request){

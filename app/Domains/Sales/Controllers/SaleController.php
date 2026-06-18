@@ -24,6 +24,7 @@ use Illuminate\Http\Exception\HttpResponseException;
 use App\Domains\Sales\Requests\SalePostRequest;
 use App\Domains\Sales\Services\SaleService;
 use App\Domains\Sales\Queries\GetPaginatedSalesQuery;
+use App\Services\OpenWAService;
 use App\Domains\Sales\Queries\GetCuteSalesQuery;
 use Illuminate\Support\Facades\DB;
 use App\Models\Log;
@@ -56,10 +57,11 @@ class SaleController extends Controller
 	public function getPaginate(Request $request, GetPaginatedSalesQuery $query)
 	{
 		$perPage = $request->get('perPage', 15);
-		$isPaid = $request->get('isPaid');
+		$isPaid  = $request->get('isPaid');
+		$search  = $request->get('search');
 
 		try {
-			$sales = $query->execute($perPage, $isPaid);
+			$sales = $query->execute($perPage, $isPaid, $search);
 		} catch (\InvalidArgumentException $e) {
 			return response()->json(['error' => $e->getMessage()], 400);
 		}
@@ -229,10 +231,47 @@ class SaleController extends Controller
 	 * REGISTRO DE VENTAS (MÉTODO CRÍTICO REFACTORIZADO)
 	 * Cambiado Request por SalePostRequest para asegurar data limpia.
 	 */
-	public function add(SalePostRequest $request, SaleService $saleService)
+	public function add(SalePostRequest $request, SaleService $saleService, OpenWAService $whatsapp)
 	{
 		try {
 			$primarySale = $saleService->createSale($request->get('sales'));
+
+            // Enviar WhatsApp Recibo
+            if ($primarySale && $primarySale->client_id) {
+                $client = Client::find($primarySale->client_id);
+                if ($client && $client->phone) {
+                    $nombre = strtok($client->name, " ");
+                    $fecha = Carbon::now()->locale('es')->translatedFormat('d \d\e F \d\e\l Y h:i A');
+                    $folio = $primarySale->id;
+                    $total = 0;
+                    $detalles = "";
+
+                    $primarySale->load(['sales.cat_package', 'sales.cat_service', 'sales.cat_product', 'sales.cat_pill']);
+                    
+                    if ($primarySale->sales && count($primarySale->sales) > 0) {
+                        foreach ($primarySale->sales as $item) {
+                            $nombreItem = 'Artículo';
+                            if ($item->cat_package) $nombreItem = $item->cat_package->name;
+                            elseif ($item->cat_service) $nombreItem = $item->cat_service->name;
+                            elseif ($item->cat_product) $nombreItem = $item->cat_product->name;
+                            elseif ($item->cat_pill) $nombreItem = $item->cat_pill->name;
+
+                            $subtotal = number_format($item->amount, 2);
+                            $detalles .= "▫️ {$item->count}x {$nombreItem} (\${$subtotal})\n";
+                            $total += $item->amount;
+                        }
+                    } else {
+                        $total = $primarySale->amount;
+                        $detalles = "▫️ 1x Compra (\$" . number_format($total, 2) . ")\n";
+                    }
+
+                    $totalStr = number_format($total, 2);
+                    $mensaje = "¡Hola *{$nombre}*! 🛍️\n\nMuchas gracias por tu preferencia. Aquí tienes el resumen de tu compra en *Fase 2*:\n\n*Folio:* #{$folio}\n*Fecha:* {$fecha}\n\n*Detalle:*\n{$detalles}--------------------------\n*TOTAL:* \${$totalStr}\n\n¡Esperamos que lo disfrutes! 💆‍♀️💆‍♂️";
+
+                    $whatsapp->sendMessage($client->phone, $mensaje);
+                }
+            }
+
 			return response($primarySale, 200)->header('Content-Type', 'application/json');
 		} catch (\Exception $e) {
 			return response()->json(['error' => $e->getMessage()], $e->getCode() ?: 500);
