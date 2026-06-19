@@ -3,38 +3,27 @@
 namespace App\Domains\Sales\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Contracts\Validation\Validator;
 
 class SalePostRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
     public function authorize()
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
         return [
-            'department_id' => 'required',
-            'responsible_id' => 'required',
+            'sales' => 'required|array|min:1',
+            'sales.*.department_id' => 'required',
+            'sales.*.responsible_id' => 'required',
+            'sales.*.client_id' => 'required',
+            'sales.*.count' => 'required|numeric|min:1',
+            'sales.*.price' => 'required|numeric|min:0',
+            'sales.*.amount' => 'nullable|numeric|min:0',
         ];
     }
 
-    /**
-     * Get the error messages for the defined validation rules.
-     *
-     * @return array
-     */
     public function messages()
     {
         return [];

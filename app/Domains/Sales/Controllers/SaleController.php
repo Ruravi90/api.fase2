@@ -235,6 +235,7 @@ class SaleController extends Controller
 	{
 		try {
 			$primarySale = $saleService->createSale($request->get('sales'));
+            $primarySale->load(['sales.cat_package', 'sales.packages']);
 
             // Enviar WhatsApp Recibo
             if ($primarySale && $primarySale->client_id) {

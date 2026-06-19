@@ -36,7 +36,9 @@ Route::middleware('guest')->group(function () {
     Route::get('/queue', [QueueController::class, 'index']);
 });
 
-Route::middleware('auth:api')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/users/logout', [UserController::class, 'apiLogout']);
+    Route::get('/users/me', [UserController::class, 'apiMe']);
     Route::controller(ScheduleController::class)->group(function () {
         Route::get('/schedules', 'getAll');
         Route::get('/schedules/{id}', 'find');

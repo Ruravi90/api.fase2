@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -75,13 +76,55 @@ class UserController extends Controller
             return response()->json(['error' => 'Unauthorised'], 401);
         }
 
-        if (Schema::hasTable('roles') && Schema::hasTable('model_has_roles')) {
-            $user->load('roles');
+        Auth::guard('web')->login($user);
+        $request->session()->regenerate();
+
+        return response()->json(['success' => $this->userPayload($user)], 200);
+    }
+
+    /**
+     * Invalidate the current session.
+     *
+     * @group User
+     * @authenticated
+     *
+     * @response 200 {"success":true}
+     */
+    public function apiLogout(Request $request)
+    {
+        Auth::guard('web')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return response()->json(['success' => true], 200);
+    }
+
+    /**
+     * Return the authenticated user for SPA session restore.
+     *
+     * @group User
+     * @authenticated
+     *
+     * @response 200 {"success":{}}
+     */
+    public function apiMe(Request $request)
+    {
+        $user = $request->user();
+
+        if (! $user) {
+            return response()->json(['error' => 'Unauthenticated'], 401);
         }
 
-        $user->token = $user->createToken('fase2spa')->accessToken;
+        return response()->json(['success' => $this->userPayload($user)], 200);
+    }
 
-        return response()->json(['success' => $user], 200);
+    private function userPayload(User $user): array
+    {
+        if (Schema::hasTable('roles') && Schema::hasTable('model_has_roles')) {
+            $user->loadMissing('roles');
+        }
+
+        return $user->makeHidden(['password', 'remember_token'])->toArray();
     }
 
     /**
@@ -112,8 +155,10 @@ class UserController extends Controller
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
-        $success['token'] = $user->createToken('fase2spa')->accessToken;
-        $success['name'] = $user->name;
+        Auth::guard('web')->login($user);
+        $request->session()->regenerate();
+
+        $success = $this->userPayload($user);
         return response()->json(['success' => $success], 200);
     }
 

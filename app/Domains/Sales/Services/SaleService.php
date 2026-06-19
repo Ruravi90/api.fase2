@@ -8,6 +8,7 @@ use App\Models\PillInventory;
 use App\Models\ProductInventory;
 use App\Models\SaleAdditional;
 use App\Models\CatPackage;
+use App\Models\Package;
 use App\Domains\Sales\Events\SaleCreated;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -93,7 +94,7 @@ class SaleService
 
                 // Si es paquete
                 if (isset($_sale['package_id'])) {
-                    $package = new \fase2\Package; // Asumiendo uso de alias o ruta completa
+                    $package = new Package;
                     $package->sale_id = $sale->id;
                     $package->client_id = $sale->client_id;
                     $package->cat_package_id = $_sale['package_id'];
