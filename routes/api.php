@@ -279,6 +279,20 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/box/recent_activity', 'getRecentActivity');
         Route::get('/box/alerts', 'getDashboardAlerts');
     });
+
+    Route::controller(\App\Http\Controllers\OpenwaController::class)->group(function () {
+        Route::get('/openwa/sessions', 'index');
+        Route::post('/openwa/sessions', 'store');
+        Route::post('/openwa/sessions/{id}/start', 'start');
+        Route::get('/openwa/sessions/{id}/qr', 'getQr');
+        Route::delete('/openwa/sessions/{id}', 'destroy');
+    });
+
+    Route::controller(\App\Http\Controllers\ChatController::class)->group(function () {
+        Route::get('/chat/conversations', 'index');
+        Route::get('/chat/conversations/{id}/messages', 'show');
+        Route::post('/chat/conversations/{id}/messages', 'store');
+    });
 });
 
 Route::get('/backup/database', [DatabaseBackupController::class, 'form']);

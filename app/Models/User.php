@@ -32,5 +32,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Sale::class);
     }
+
+    public function chatConversations()
+    {
+        return $this->belongsToMany(ChatConversation::class, 'chat_conversation_user')->withPivot('last_read_at');
+    }
 }
 
