@@ -29,6 +29,9 @@ use App\Domains\Sales\Controllers\SaleController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Broadcast;
+
+Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
 Route::middleware('guest')->group(function () {
     Route::post('/users/login', [UserController::class, 'apiLogin']);
