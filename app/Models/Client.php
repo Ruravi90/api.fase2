@@ -5,9 +5,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Client extends Model
 {
+    use \App\Traits\BelongsToTenant;
+
 	protected $table = "clients";
 
-	//protected $fillable = ['name','last_name','mother_last_name','email'];
+	protected $fillable = ['name','last_name','mother_last_name','email','phone','mobile','address_id','status','rfc'];
 
 	public function address(){
         //return $this->hasMany(Address::class);

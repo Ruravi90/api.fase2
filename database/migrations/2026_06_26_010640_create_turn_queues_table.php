@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('turn_queues', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('schedule_id')->nullable();
+            $table->unsignedInteger('schedule_id')->nullable();
             $table->string('turn_number'); // e.g., 'A-1', 'B-1'
             $table->enum('status', ['waiting', 'in_progress', 'completed', 'delayed'])->default('waiting');
             $table->timestamp('notified_at')->nullable();
