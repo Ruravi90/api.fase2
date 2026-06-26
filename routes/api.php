@@ -28,6 +28,7 @@ use App\Http\Controllers\SaleAdditionalController;
 use App\Domains\Sales\Controllers\SaleController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ClinicalNoteController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Broadcast;
 
@@ -50,6 +51,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/schedules/{id}/check-in', 'checkIn');
         Route::put('/schedules/{id}', 'update');
         Route::delete('/schedules/{id}', 'delete');
+    });
+
+    Route::controller(ClinicalNoteController::class)->group(function () {
+        Route::get('/clinical_notes/history/{clientId}', 'getHistory');
+        Route::post('/clinical_notes/draft', 'saveDraft');
+        Route::post('/clinical_notes/{id}/sign', 'signNote');
     });
 
     Route::controller(ClientController::class)->group(function () {
