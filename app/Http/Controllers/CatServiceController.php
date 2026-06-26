@@ -43,6 +43,9 @@ class CatServiceController extends Controller
 		$service = new CatService;
 		$service->name = $request->get('name');
         $service->price = $request->get('price');
+        if ($request->has('duration_minutes')) {
+            $service->duration_minutes = $request->get('duration_minutes');
+        }
 		$service->save();
 		return response()->json(['success' => true]);
 	}
@@ -51,6 +54,9 @@ class CatServiceController extends Controller
     	$service = CatService::find($id);
 		$service->name = $request->get('name');
         $service->price = $request->get('price');
+        if ($request->has('duration_minutes')) {
+            $service->duration_minutes = $request->get('duration_minutes');
+        }
 		$service->save();
     	return response()->json(['success' => true]);
     }

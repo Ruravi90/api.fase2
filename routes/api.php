@@ -36,12 +36,13 @@ Broadcast::routes(['middleware' => ['auth:sanctum']]);
 Route::middleware('guest')->group(function () {
     Route::post('/users/login', [UserController::class, 'apiLogin']);
     Route::post('/users/register', [UserController::class, 'apiRegister']);
-    Route::get('/queue', [QueueController::class, 'index']);
 });
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/users/logout', [UserController::class, 'apiLogout']);
     Route::get('/users/me', [UserController::class, 'apiMe']);
+    Route::get('/queue/active', [QueueController::class, 'getActiveQueue']);
+    Route::post('/queue/advance', [QueueController::class, 'advanceTurn']);
     Route::controller(ScheduleController::class)->group(function () {
         Route::get('/schedules', 'getAll');
         Route::get('/schedules/{id}', 'find');

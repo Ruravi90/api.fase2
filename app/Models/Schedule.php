@@ -17,6 +17,10 @@ class Schedule extends Model
         return $this->belongsTo(Package::class, 'package_id');
     }
 
+    public function service(){
+        return $this->belongsTo(CatService::class, 'service_id');
+    }
+
     public function tracking(){
         return $this->hasOne(PackageTracking::class, 'schedule_id');
     }

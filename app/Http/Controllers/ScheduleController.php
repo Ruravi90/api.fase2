@@ -28,44 +28,82 @@ class ScheduleController extends Controller
 
     // Api rest
 	public function add(ScheduleRequest $request){
+        $start = $request->get('start');
+        $end = $request->get('end');
+
+        $overlapping = Schedule::where(function($query) use ($start, $end) {
+            $query->where('start', '<', $end)
+                  ->where('end', '>', $start);
+        })->exists();
+
+        if ($overlapping) {
+            return response(['success' => false, 'error' => 'El horario se empalma con otra cita existente.'], 400);
+        }
+
 		$schedule = new Schedule;
 		$schedule->title = $request->get('title');
 		$schedule->description = $request->get('description');
-		$schedule->start = $request->get('start');
-		$schedule->end = $request->get('end');
+		$schedule->start = $start;
+		$schedule->end = $end;
 		$schedule->color = $request->get('color');
 		$schedule->allDay = $request->get('allDay');
 		$schedule->client_id = $request->get('client_id');
         $schedule->package_id = $request->get('package_id');
+        if ($request->has('service_id')) {
+            $schedule->service_id = $request->get('service_id');
+        }
 		$schedule->save();
 
         if ($schedule->client_id) {
             $client = Client::find($schedule->client_id);
-            // El modelo de cliente usualmente tiene la propiedad 'phone'. Ajusta si se llama 'cellphone' u otro.
             if ($client && $client->phone) {
                 $date = Carbon::parse($schedule->start)->locale('es');
                 $fecha = ucfirst($date->translatedFormat('l d \d\e F \d\e\l Y'));
                 $hora = $date->translatedFormat('h:i A');
 
-                $nombre = strtok($client->name, " "); // Primer nombre
+                $nombre = strtok($client->name, " ");
                 $mensaje = "¡Hola *{$nombre}*! 🗓️\n\nConfirmamos tu cita en *Fase 2* para:\n*Servicio:* {$schedule->title}\n*Fecha:* {$fecha}\n*Hora:* {$hora}\n\nSi tienes alguna duda o necesitas reagendar, por favor contáctanos por esta misma vía. ¡Te esperamos! ✨";
                 $this->whatsapp->sendMessage($client->phone, $mensaje);
             }
         }
 
+        if ($request->get('is_express')) {
+            $turnNumber = \App\Http\Controllers\QueueController::generateNextTurnNumber();
+            \App\Models\TurnQueue::create([
+                'schedule_id' => $schedule->id,
+                'turn_number' => $turnNumber,
+                'status' => 'waiting'
+            ]);
+        }
+
 		return ['success' => true]; 
 	}
 
-    public function update($id,ScheduleRequest $request){// se envia el id a $client 
+    public function update($id,ScheduleRequest $request){
+        $start = $request->get('start');
+        $end = $request->get('end');
+
+        $overlapping = Schedule::where('id', '!=', $id)->where(function($query) use ($start, $end) {
+            $query->where('start', '<', $end)
+                  ->where('end', '>', $start);
+        })->exists();
+
+        if ($overlapping) {
+            return response(['success' => false, 'error' => 'El horario se empalma con otra cita existente.'], 400);
+        }
+
     	$schedule = Schedule::find($id);
 		$schedule->title = $request->get('title');
 		$schedule->description = $request->get('description');
-		$schedule->start = $request->get('start');
-		$schedule->end = $request->get('end');
+		$schedule->start = $start;
+		$schedule->end = $end;
 		$schedule->color = $request->get('color');
-		$schedule->allDay = $request->get('allDay'); 
+		$schedule->allDay = $request->get('allDay');
 		$schedule->client_id = $request->get('client_id');
         $schedule->package_id = $request->get('package_id');
+        if ($request->has('service_id')) {
+            $schedule->service_id = $request->get('service_id');
+        }
 		$schedule->save();
 
         if ($schedule->client_id) {
@@ -95,12 +133,12 @@ class ScheduleController extends Controller
     }
 
     public function getAll(){
-        $schedule = Schedule::with(['client', 'package.type', 'tracking'])->get();
-        return response($schedule, 200)->header('Content-Type', 'application/json');
+		return response(Schedule::with('client', 'package.type', 'tracking', 'service')->get(), 200)
+		->header('Content-Type', 'application/json');
     }
 
     public function find($id){
-        $schedule = Schedule::with(['client', 'package.type', 'tracking'])->find($id);
+        $schedule = Schedule::with('client', 'package.type', 'tracking', 'service')->find($id);
         return response($schedule, 200)->header('Content-Type', 'application/json');
     }
 
@@ -147,6 +185,30 @@ class ScheduleController extends Controller
                     $productInventory->count = ((int)$productInventory->count - (int)$_complement["count"]);
                     $productInventory->save();
                 }
+            }
+        }
+
+        // AGREGAR A LA COLA DE TURNOS
+        $turnNumber = \App\Http\Controllers\QueueController::generateNextTurnNumber();
+        \App\Models\TurnQueue::create([
+            'schedule_id' => $schedule->id,
+            'turn_number' => $turnNumber,
+            'status' => 'waiting'
+        ]);
+
+        // Si no hay nadie en progreso, avanzar automáticamente a este como 'in_progress'
+        $inProgress = \App\Models\TurnQueue::where('status', 'in_progress')
+            ->whereDate('created_at', \Carbon\Carbon::today())
+            ->first();
+            
+        if (!$inProgress) {
+            $firstWaiting = \App\Models\TurnQueue::where('status', 'waiting')
+                ->whereDate('created_at', \Carbon\Carbon::today())
+                ->orderBy('id', 'asc')
+                ->first();
+            if ($firstWaiting) {
+                $firstWaiting->status = 'in_progress';
+                $firstWaiting->save();
             }
         }
 

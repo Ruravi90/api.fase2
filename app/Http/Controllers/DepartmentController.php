@@ -27,6 +27,12 @@ class DepartmentController extends Controller
 		$department = new Department;
 		$department->name = $request->get('name');
 		$department->description = $request->get('description');
+		if ($request->has('business_hours_start')) {
+			$department->business_hours_start = $request->get('business_hours_start');
+		}
+		if ($request->has('business_hours_end')) {
+			$department->business_hours_end = $request->get('business_hours_end');
+		}
 		$department->save();
 
 		return ['success' => true]; 
@@ -36,6 +42,12 @@ class DepartmentController extends Controller
     	$department = Department::find($id);
 		$department->name = $request->get('name');
 		$department->description = $request->get('description');
+		if ($request->has('business_hours_start')) {
+			$department->business_hours_start = $request->get('business_hours_start');
+		}
+		if ($request->has('business_hours_end')) {
+			$department->business_hours_end = $request->get('business_hours_end');
+		}
 		$department->save();
 
     	return ['success' => true]; 

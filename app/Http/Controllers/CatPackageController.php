@@ -45,6 +45,9 @@ class CatPackageController extends Controller
         $package->name = $request->get('name');
         $package->price = $request->get('price');
         $package->session_count = $request->get('session_count');
+        if ($request->has('duration_minutes')) {
+            $package->duration_minutes = $request->get('duration_minutes');
+        }
         $package->save();
 
         if ($request->has('complements')) {
@@ -70,6 +73,9 @@ class CatPackageController extends Controller
 		$package->name = $request->get('name');
         $package->price = $request->get('price');
         $package->session_count = $request->get('session_count');
+        if ($request->has('duration_minutes')) {
+            $package->duration_minutes = $request->get('duration_minutes');
+        }
         $package->save();
         
         if($package->complements->isNotEmpty()){
