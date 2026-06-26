@@ -13,6 +13,7 @@
         "laravel/reverb": "^1.10",
         "laravel/sanctum": "*",
         "laravel/tinker": "^2.9",
+        "mercadopago/dx-php": "3.0.4",
         "mike42/escpos-php": "^4.0",
         "spatie/laravel-activitylog": "^4.12",
         "spatie/laravel-multitenancy": "^4.1",

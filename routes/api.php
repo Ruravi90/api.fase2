@@ -59,6 +59,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/clinical_notes/{id}/sign', 'signNote');
     });
 
+    // Rutas para Clínicas (Tenants) gestionando su suscripción SaaS
+    Route::get('/saas/available-plans', [\App\Http\Controllers\Saas\PlanController::class, 'index']);
+    Route::post('/saas/payment/preference', [\App\Http\Controllers\Saas\MercadoPagoController::class, 'createPreference']);
+
     Route::controller(ClientController::class)->group(function () {
         Route::get('/clients', 'getAll');
         Route::get('/clients/{id}', 'find');
@@ -309,3 +313,15 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::get('/backup/database', [DatabaseBackupController::class, 'form']);
 Route::post('/backup/database', [DatabaseBackupController::class, 'create']);
 Route::post('/backup/database/migrate', [DatabaseBackupController::class, 'backupAndMigrate']);
+
+// ---------------------------------------------------------
+// RUTAS DEL DUEÑO DEL SAAS (Super Admin)
+// ---------------------------------------------------------
+Route::middleware(['auth:sanctum', 'role:Super administrador'])->prefix('saas')->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\Saas\DashboardController::class, 'index']);
+    
+    Route::apiResource('tenants', \App\Http\Controllers\Saas\TenantController::class);
+    Route::post('tenants/{tenant}/assign-plan', [\App\Http\Controllers\Saas\TenantController::class, 'assignPlan']);
+    Route::apiResource('plans', \App\Http\Controllers\Saas\PlanController::class);
+    Route::apiResource('subscriptions', \App\Http\Controllers\Saas\SubscriptionController::class)->only(['index', 'show']);
+});
