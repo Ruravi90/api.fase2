@@ -13,7 +13,7 @@ class RolController extends Controller
     }
 
     public function getAll(){
-        $roles = Role::all();
+        $roles = Role::where('slug', '!=', 'super_admin')->get();
         return response($roles, 200)->header('Content-Type', 'application/json');
     }
 
@@ -27,6 +27,8 @@ class RolController extends Controller
 
         $rol              = new Role;
         $rol->name        = $request->input("name");
+        $rol->slug        = $request->input("slug");
+        $rol->description = $request->input("description");
         $rol->guard_name  = 'web';
         $rol->save();
         $rol->syncPermissions($this->permissionIds($request));
@@ -38,6 +40,8 @@ class RolController extends Controller
     {
         $rol              = Role::find($id);
         $rol->name        = $request->input("name");
+        $rol->slug        = $request->input("slug");
+        $rol->description = $request->input("description");
         $rol->save();
         $rol->syncPermissions($this->permissionIds($request));
         return ['success' => true];

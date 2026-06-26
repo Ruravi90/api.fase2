@@ -76,13 +76,24 @@ class DatabaseSeeder extends Seeder
             'module_package',
             'module_purchases',
             'module_box',
+            'module_clinical_note',
+            'add_clinical_note',
+            'edit_clinical_note',
+            'delete_clinical_note',
+            'module_medical_record',
+            'add_medical_record',
+            'edit_medical_record',
+            'delete_medical_record',
         ];
 
         foreach ($permissions as $permission) {
-            Permission::firstOrCreate([
-                'name' => $permission,
-                'guard_name' => 'web',
-            ]);
+            Permission::firstOrCreate(
+                ['slug' => $permission],
+                [
+                    'name' => $permission,
+                    'guard_name' => 'web',
+                ]
+            );
         }
 
         $roles = [
@@ -90,18 +101,42 @@ class DatabaseSeeder extends Seeder
             'admin',
             'user',
             'agent',
+            'medico',
         ];
 
         foreach ($roles as $roleName) {
-            Role::firstOrCreate([
-                'name' => $roleName,
-                'guard_name' => 'web',
-            ]);
+            Role::firstOrCreate(
+                ['slug' => $roleName],
+                [
+                    'name' => $roleName,
+                    'guard_name' => 'web',
+                ]
+            );
         }
 
         $allPermissions = Permission::all();
-        Role::where('name', 'super_admin')->first()->syncPermissions($allPermissions);
-        Role::where('name', 'admin')->first()->syncPermissions($allPermissions);
+        Role::where('slug', 'super_admin')->first()->syncPermissions($allPermissions);
+        Role::where('slug', 'admin')->first()->syncPermissions($allPermissions);
+
+        $medicoPermissionsSlugs = [
+            'module_clinical_note',
+            'add_clinical_note',
+            'edit_clinical_note',
+            'delete_clinical_note',
+            'module_medical_record',
+            'add_medical_record',
+            'edit_medical_record',
+            'delete_medical_record',
+            'module_client', // Permiso para ver la lista de pacientes/clientes
+            'module_schedule', // Permiso para ver la agenda
+        ];
+        
+        $medicoPermissions = Permission::whereIn('slug', $medicoPermissionsSlugs)->get();
+        Role::where('slug', 'medico')->first()->syncPermissions($medicoPermissions);
+
+        $adminRole = Role::where('slug', 'admin')->first();
+        $superAdminRole = Role::where('slug', 'super_admin')->first();
+        $agentRole = Role::where('slug', 'agent')->first();
 
         User::updateOrCreate(
             ['username' => 'raguilar'],
@@ -112,7 +147,7 @@ class DatabaseSeeder extends Seeder
                 'email' => 'ruravi.app@gmail.com',
                 'password' => Hash::make('ruravi90'),
             ]
-        )->syncRoles(['admin', 'super_admin']);
+        )->syncRoles([$adminRole, $superAdminRole]);
 
         User::updateOrCreate(
             ['username' => 'jcuevas'],
@@ -123,7 +158,7 @@ class DatabaseSeeder extends Seeder
                 'email' => 'jcuqevas@fase2spa.com.mx',
                 'password' => Hash::make('jcuevas'),
             ]
-        )->syncRoles(['admin']);
+        )->syncRoles([$adminRole]);
 
         User::updateOrCreate(
             ['username' => 'agente1'],
@@ -133,7 +168,7 @@ class DatabaseSeeder extends Seeder
                 'email' => 'agente@fase2spa.com.mx',
                 'password' => Hash::make('agente1'),
             ]
-        )->syncRoles(['agent']);
+        )->syncRoles([$agentRole]);
 
         CatExpense::firstOrCreate(['name' => 'Pastillas']);
         CatExpense::firstOrCreate(['name' => 'Productos']);

@@ -252,7 +252,11 @@ class UserController extends Controller
             $perPage = $request->get('perPage');
         }
 
-        $Users = User::paginate($perPage);
+        $Users = User::with('roles')
+            ->whereDoesntHave('roles', function ($query) {
+                $query->where('slug', 'super_admin');
+            })
+            ->paginate($perPage);
 
         return response($Users, 200)->header('Content-Type', 'application/json');
     }
