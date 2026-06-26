@@ -14,6 +14,8 @@ class ClinicalNoteController extends Controller
 {
     /**
      * Get the medical record and clinical history for a client.
+     * @param int $clientId
+     * @return \Illuminate\Http\JsonResponse
      */
     public function getHistory($clientId)
     {
@@ -36,6 +38,8 @@ class ClinicalNoteController extends Controller
 
     /**
      * Save a draft of a clinical note.
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function saveDraft(Request $request)
     {
@@ -46,6 +50,7 @@ class ClinicalNoteController extends Controller
             'objective' => 'nullable|string',
             'analysis' => 'nullable|string',
             'plan' => 'nullable|string',
+            'diagnoses' => 'nullable|array',
             'weight' => 'nullable|numeric',
             'blood_pressure' => 'nullable|string',
             'temperature' => 'nullable|numeric',
@@ -77,6 +82,9 @@ class ClinicalNoteController extends Controller
 
     /**
      * Sign and close a clinical note.
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
      */
     public function signNote(Request $request, $id)
     {
@@ -92,6 +100,7 @@ class ClinicalNoteController extends Controller
             'objective' => 'nullable|string',
             'analysis' => 'nullable|string',
             'plan' => 'nullable|string',
+            'diagnoses' => 'nullable|array',
             'weight' => 'nullable|numeric',
             'blood_pressure' => 'nullable|string',
             'temperature' => 'nullable|numeric',

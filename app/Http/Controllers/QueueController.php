@@ -9,7 +9,10 @@ use Carbon\Carbon;
 
 class QueueController extends Controller
 {
-    // Obtener la cola activa
+    /**
+     * Get the active queue including waiting and in_progress turns for today.
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getActiveQueue()
     {
         $queue = TurnQueue::with(['schedule.client', 'schedule.package.type'])
@@ -21,7 +24,11 @@ class QueueController extends Controller
         return response()->json($queue);
     }
 
-    // Avanzar turno (finaliza actual y pasa al siguiente)
+    /**
+     * Complete the current turn and advance the next waiting turn to in_progress.
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function advanceTurn(Request $request)
     {
         // El actual pasa a completed
@@ -48,8 +55,11 @@ class QueueController extends Controller
         return response()->json(['success' => true, 'current' => $next]);
     }
 
-    // Generar siguiente número de turno alfanumérico secuencial del día
-    // (Este método se usará desde ScheduleController al hacer checkIn)
+    /**
+     * Generate the next sequential alphanumeric turn number for today.
+     * e.g., A-1, A-2... B-1
+     * @return string
+     */
     public static function generateNextTurnNumber()
     {
         $lastTurn = TurnQueue::whereDate('created_at', Carbon::today())

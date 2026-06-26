@@ -20,6 +20,7 @@ class ClinicalNote extends Model
         'objective',
         'analysis',
         'plan',
+        'diagnoses',
         'weight',
         'blood_pressure',
         'temperature',
@@ -36,6 +37,7 @@ class ClinicalNote extends Model
         'objective' => 'encrypted',
         'analysis' => 'encrypted',
         'plan' => 'encrypted',
+        'diagnoses' => 'array',
         'signed_at' => 'datetime',
     ];
 
