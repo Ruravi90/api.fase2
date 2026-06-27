@@ -318,7 +318,7 @@ Route::post('/backup/database/migrate', [DatabaseBackupController::class, 'backu
 // ---------------------------------------------------------
 // RUTAS DEL DUEÑO DEL SAAS (Super Admin)
 // ---------------------------------------------------------
-Route::middleware(['auth:sanctum', 'role:Super administrador'])->prefix('saas')->group(function () {
+Route::middleware(['auth:sanctum', 'role:super_admin'])->prefix('saas')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\Saas\DashboardController::class, 'index']);
     
     Route::apiResource('tenants', \App\Http\Controllers\Saas\TenantController::class);
