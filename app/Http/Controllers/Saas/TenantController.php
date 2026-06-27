@@ -110,4 +110,56 @@ class TenantController extends Controller
             'subscription' => $subscription
         ]);
     }
+
+    public function publicRegister(Request $request)
+    {
+        $request->validate([
+            'tenant_name' => 'required|string|max:255',
+            'domain' => 'required|string|max:255|unique:tenants,domain',
+            'name' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users,username',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:6',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            // Create Tenant
+            $tenant = new Tenant();
+            $tenant->name = $request->tenant_name;
+            $tenant->domain = $request->domain;
+            $tenant->save();
+
+            // Create Admin User
+            $user = new User();
+            $user->name = $request->name;
+            $user->username = $request->username;
+            $user->email = $request->email;
+            $user->password = Hash::make($request->password);
+            $user->lastname = '';
+            $user->motherlastname = '';
+            $user->phone_mobile = '';
+            $user->tenant_id = $tenant->id;
+            $user->save();
+
+            // Assign Admin Role
+            $user->assignRole('admin');
+
+            DB::commit();
+
+            // Automatically login the user
+            \Illuminate\Support\Facades\Auth::guard('web')->login($user);
+            $request->session()->regenerate();
+
+            // Load roles for response payload
+            $user->loadMissing('roles');
+            $success = $user->makeHidden(['password', 'remember_token'])->toArray();
+
+            return response()->json(['success' => $success], 200);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
 }

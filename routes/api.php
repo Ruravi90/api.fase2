@@ -37,6 +37,7 @@ Broadcast::routes(['middleware' => ['auth:sanctum']]);
 Route::middleware('guest')->group(function () {
     Route::post('/users/login', [UserController::class, 'apiLogin']);
     Route::post('/users/register', [UserController::class, 'apiRegister']);
+    Route::post('/saas/register', [\App\Http\Controllers\Saas\TenantController::class, 'publicRegister']);
 });
 
 Route::middleware('auth:sanctum')->group(function () {
