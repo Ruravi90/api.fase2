@@ -145,30 +145,9 @@ class DatabaseSeeder extends Seeder
                 'lastname' => 'Aguilar',
                 'motherlastname' => 'Arrezola',
                 'email' => 'ruravi.app@gmail.com',
-                'password' => Hash::make('ruravi90'),
+                'password' => Hash::make('Ruravi90#'),
             ]
         )->syncRoles([$adminRole, $superAdminRole]);
-
-        User::updateOrCreate(
-            ['username' => 'jcuevas'],
-            [
-                'name' => 'Joel',
-                'lastname' => 'Cuevas',
-                'motherlastname' => '',
-                'email' => 'jcuqevas@fase2spa.com.mx',
-                'password' => Hash::make('jcuevas'),
-            ]
-        )->syncRoles([$adminRole]);
-
-        User::updateOrCreate(
-            ['username' => 'agente1'],
-            [
-                'name' => 'Agente',
-                'lastname' => 'prueba',
-                'email' => 'agente@fase2spa.com.mx',
-                'password' => Hash::make('agente1'),
-            ]
-        )->syncRoles([$agentRole]);
 
         CatExpense::firstOrCreate(['name' => 'Pastillas']);
         CatExpense::firstOrCreate(['name' => 'Productos']);
