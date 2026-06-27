@@ -88,9 +88,8 @@ class DatabaseSeeder extends Seeder
 
         foreach ($permissions as $permission) {
             Permission::firstOrCreate(
-                ['slug' => $permission],
+                ['name' => $permission],
                 [
-                    'name' => $permission,
                     'guard_name' => 'web',
                 ]
             );
@@ -106,17 +105,16 @@ class DatabaseSeeder extends Seeder
 
         foreach ($roles as $roleName) {
             Role::firstOrCreate(
-                ['slug' => $roleName],
+                ['name' => $roleName],
                 [
-                    'name' => $roleName,
                     'guard_name' => 'web',
                 ]
             );
         }
 
         $allPermissions = Permission::all();
-        Role::where('slug', 'super_admin')->first()->syncPermissions($allPermissions);
-        Role::where('slug', 'admin')->first()->syncPermissions($allPermissions);
+        Role::where('name', 'super_admin')->first()->syncPermissions($allPermissions);
+        Role::where('name', 'admin')->first()->syncPermissions($allPermissions);
 
         $medicoPermissionsSlugs = [
             'module_clinical_note',
@@ -131,12 +129,12 @@ class DatabaseSeeder extends Seeder
             'module_schedule', // Permiso para ver la agenda
         ];
         
-        $medicoPermissions = Permission::whereIn('slug', $medicoPermissionsSlugs)->get();
-        Role::where('slug', 'medico')->first()->syncPermissions($medicoPermissions);
+        $medicoPermissions = Permission::whereIn('name', $medicoPermissionsSlugs)->get();
+        Role::where('name', 'medico')->first()->syncPermissions($medicoPermissions);
 
-        $adminRole = Role::where('slug', 'admin')->first();
-        $superAdminRole = Role::where('slug', 'super_admin')->first();
-        $agentRole = Role::where('slug', 'agent')->first();
+        $adminRole = Role::where('name', 'admin')->first();
+        $superAdminRole = Role::where('name', 'super_admin')->first();
+        $agentRole = Role::where('name', 'agent')->first();
 
         User::updateOrCreate(
             ['username' => 'raguilar'],

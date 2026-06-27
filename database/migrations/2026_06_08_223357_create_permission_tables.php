@@ -5,27 +5,40 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
+        $tableNames = config('permission.table_names');
 
+        if (empty($tableNames)) {
+            throw new \Exception('Error: config/permission.php not loaded. Run [php artisan config:clear] and try again.');
+        }
+
+        Schema::create($tableNames['permissions'], function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('name');
+            $table->string('guard_name');
+            $table->timestamps();
+            $table->unique(['name', 'guard_name']);
+        });
+
+        Schema::create($tableNames['roles'], function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('name');
+            $table->string('guard_name');
+            $table->timestamps();
+            $table->unique(['name', 'guard_name']);
+        });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         $tableNames = config('permission.table_names');
 
-        throw_if(empty($tableNames), Exception::class, 'Error: config/permission.php not found and defaults could not be merged. Please publish the package configuration before proceeding, or drop the tables manually.');
+        if (empty($tableNames)) {
+            throw new \Exception('Error: config/permission.php not loaded.');
+        }
 
-        Schema::drop($tableNames['role_has_permissions']);
-        Schema::drop($tableNames['model_has_roles']);
-        Schema::drop($tableNames['model_has_permissions']);
-        Schema::drop($tableNames['roles']);
-        Schema::drop($tableNames['permissions']);
+        Schema::dropIfExists($tableNames['roles']);
+        Schema::dropIfExists($tableNames['permissions']);
     }
 };
