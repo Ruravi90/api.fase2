@@ -254,7 +254,7 @@ class UserController extends Controller
 
         $Users = User::with('roles')
             ->whereDoesntHave('roles', function ($query) {
-                $query->where('slug', 'super_admin');
+                $query->where('name', 'super_admin');
             })
             ->paginate($perPage);
 

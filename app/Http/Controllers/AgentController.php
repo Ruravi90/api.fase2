@@ -55,7 +55,7 @@ class AgentController extends Controller
 
         $user->save();
 
-        $roles = Role::where('name', 'agent')->orWhere('slug', 'agent')->first();
+        $roles = Role::where('name', 'agent')->first();
         if ($roles) {
             $user->assignRole($roles);
         }
@@ -79,7 +79,7 @@ class AgentController extends Controller
         $user->syncRoles([]);
 		$user->save();
 
-        $roles = Role::where('name', 'agent')->orWhere('slug', 'agent')->first();
+        $roles = Role::where('name', 'agent')->first();
         if ($roles) {
             $user->assignRole($roles);
         }
@@ -101,7 +101,7 @@ class AgentController extends Controller
 	 *
 	*/
     public function getAll(){
-        $roles = Role::where('name', 'agent')->orWhere('slug', 'agent')->with('users')->first();
+        $roles = Role::where('name', 'agent')->with('users')->first();
         $agents = $roles ? $roles->users : collect();
 		return response($agents, 200)->header('Content-Type', 'application/json');
     }
