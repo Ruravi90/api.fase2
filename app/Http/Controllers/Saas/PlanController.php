@@ -24,7 +24,7 @@ class PlanController extends Controller
             'name' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
             'currency' => 'required|string|max:3',
-            'billing_cycle' => 'required|in:monthly,yearly',
+            'billing_cycle' => 'required|in:monthly,yearly,lifetime',
             'features' => 'array',
             'features.*' => 'exists:features,id'
         ]);
@@ -58,7 +58,7 @@ class PlanController extends Controller
             'name' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
             'currency' => 'required|string|max:3',
-            'billing_cycle' => 'required|in:monthly,yearly',
+            'billing_cycle' => 'required|in:monthly,yearly,lifetime',
             'features' => 'array',
             'features.*' => 'exists:features,id'
         ]);
