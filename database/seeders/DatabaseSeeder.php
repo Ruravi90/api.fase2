@@ -153,5 +153,10 @@ class DatabaseSeeder extends Seeder
         CatTypeSale::firstOrCreate(['name' => 'Efectivo']);
         CatTypeSale::firstOrCreate(['name' => 'Debito']);
         CatTypeSale::firstOrCreate(['name' => 'Credito']);
+
+        // Call other seeders
+        $this->call([
+            TenantSeeder::class,
+        ]);
     }
 }
