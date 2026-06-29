@@ -24,6 +24,12 @@ return Application::configure(basePath: dirname(__DIR__))
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
             'check_subscription' => \App\Http\Middleware\CheckSubscription::class,
         ]);
+        $middleware->api(append: [
+            \Illuminate\Session\Middleware\AuthenticateSession::class,
+        ]);
+        $middleware->web(append: [
+            \Illuminate\Session\Middleware\AuthenticateSession::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

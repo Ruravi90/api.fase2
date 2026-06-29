@@ -77,6 +77,7 @@ class UserController extends Controller
         }
 
         Auth::guard('web')->login($user);
+        Auth::guard('web')->logoutOtherDevices($request->input('password'));
         $request->session()->regenerate();
 
         return response()->json(['success' => $this->userPayload($user)], 200);
