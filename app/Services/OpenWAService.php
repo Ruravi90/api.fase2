@@ -18,8 +18,14 @@ class OpenWAService
         $this->apiKey = env('OPENWA_API_KEY');
         // Usaremos 'fase2-bot' como nombre de sesión por defecto (basado en tu captura)
         $this->sessionId = 'fase2-bot'; 
-        // Bandera para activar/desactivar envíos
-        $this->isEnabled = env('OPENWA_ENABLED', true);
+        
+        $tenant = \App\Models\Tenant::current();
+        if ($tenant) {
+            $this->isEnabled = $tenant->hasFeature('module-whatsapp');
+        } else {
+            // Bandera de fallback en caso de no estar en contexto de tenant
+            $this->isEnabled = env('OPENWA_ENABLED', true);
+        }
     }
 
     private function client()

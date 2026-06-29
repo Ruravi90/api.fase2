@@ -12,8 +12,10 @@ class PlanController extends Controller
 {
     public function index()
     {
+        $plans = Plan::with('features')->get();
+        \Log::info("PlanController@index called by user " . auth()->id() . ". Found plans: " . count($plans));
         return response()->json([
-            'plans' => Plan::with('features')->get(),
+            'plans' => $plans,
             'features' => Feature::all()
         ]);
     }

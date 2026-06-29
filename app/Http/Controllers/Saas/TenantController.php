@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Saas;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Spatie\Multitenancy\Models\Tenant;
+use App\Models\Tenant;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
@@ -13,7 +13,7 @@ class TenantController extends Controller
 {
     public function index()
     {
-        return Tenant::all();
+        return Tenant::with('subscription.plan')->get();
     }
 
     public function store(Request $request)
@@ -97,13 +97,15 @@ class TenantController extends Controller
 
         $tenant = Tenant::findOrFail($id);
         
-        $subscription = new \App\Models\Subscription();
-        $subscription->tenant_id = $tenant->id;
-        $subscription->plan_id = $request->plan_id;
-        $subscription->status = 'active';
-        $subscription->starts_at = now();
-        $subscription->ends_at = now()->addMonths($request->months);
-        $subscription->save();
+        $subscription = \App\Models\Subscription::updateOrCreate(
+            ['tenant_id' => $tenant->id],
+            [
+                'plan_id' => $request->plan_id,
+                'status' => 'active',
+                'starts_at' => now(),
+                'ends_at' => now()->addMonths($request->months)
+            ]
+        );
 
         return response()->json([
             'message' => 'Plan asignado exitosamente',

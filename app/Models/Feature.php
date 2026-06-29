@@ -10,6 +10,6 @@ class Feature extends Model
 
     public function plans()
     {
-        return $this->belongsToMany(Plan::class);
+        return $this->belongsToMany(Plan::class)->withPivot('limit_value');
     }
 }

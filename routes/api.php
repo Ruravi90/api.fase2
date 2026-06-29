@@ -34,6 +34,12 @@ use Illuminate\Support\Facades\Broadcast;
 
 Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
+Route::get('/health', function () {
+    return response()->json([
+        'status' => 'ok',
+        'timestamp' => now()->toIso8601String()
+    ]);
+});
 Route::middleware('guest')->group(function () {
     Route::post('/users/login', [UserController::class, 'apiLogin']);
     Route::post('/users/register', [UserController::class, 'apiRegister']);
@@ -63,6 +69,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Rutas para Clínicas (Tenants) gestionando su suscripción SaaS
     Route::get('/saas/available-plans', [\App\Http\Controllers\Saas\PlanController::class, 'index']);
     Route::post('/saas/payment/preference', [\App\Http\Controllers\Saas\MercadoPagoController::class, 'createPreference']);
+
 
     Route::controller(ClientController::class)->group(function () {
         Route::get('/clients', 'getAll');
@@ -311,9 +318,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 });
 
-Route::get('/backup/database', [DatabaseBackupController::class, 'form']);
-Route::post('/backup/database', [DatabaseBackupController::class, 'create']);
-Route::post('/backup/database/migrate', [DatabaseBackupController::class, 'backupAndMigrate']);
+Route::post('/saas/payment/webhook', [\App\Http\Controllers\Saas\MercadoPagoController::class, 'webhook']);
 
 // ---------------------------------------------------------
 // RUTAS DEL DUEÑO DEL SAAS (Super Admin)
