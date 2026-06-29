@@ -5,6 +5,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Provider extends Model
 {
+    use \App\Traits\BelongsToTenant;
+
 	protected $table = "providers";
 
 	//protected $fillable = ['business_name','contact_name','office_phone','email'];

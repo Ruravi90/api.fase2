@@ -4,6 +4,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class CatReference extends Model
 {
+    use \App\Traits\BelongsToTenant;
+
 	protected $table = "cat_references";
 	protected $fillable = ['name'];
 

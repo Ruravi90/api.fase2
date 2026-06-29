@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class WhatsappSession extends Model
 {
+    use \App\Traits\BelongsToTenant;
+
     protected $fillable = [
         'session_id',
         'name',

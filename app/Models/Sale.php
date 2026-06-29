@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Sale extends Model
 {
+    use \App\Traits\BelongsToTenant;
+
     protected $table = "sales";
 
 	public function client(){

@@ -5,6 +5,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class CatPackage extends Model
 {
+    use \App\Traits\BelongsToTenant;
+
 	protected $table = "cat_packages";
 
 	protected $fillable = ['name','price','session_count'];

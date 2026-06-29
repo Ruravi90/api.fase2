@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Payment extends Model
 {
+    use \App\Traits\BelongsToTenant;
+
     protected $table = "payments";
 
 	//protected $fillable = ['name','last_name','mother_last_name','email'];

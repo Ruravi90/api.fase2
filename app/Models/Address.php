@@ -5,6 +5,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Address extends Model
 {
+    use \App\Traits\BelongsToTenant;
+
 	protected $table = "address";
 
 	public function client(){

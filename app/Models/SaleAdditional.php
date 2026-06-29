@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class SaleAdditional extends Model
 {
+    use \App\Traits\BelongsToTenant;
+
     protected $table = "sale_additionals";
 	public function sale(){
 		return $this->hasOne('App\Models\Sale','id', 'sale_id');

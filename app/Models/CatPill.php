@@ -4,6 +4,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class CatPill extends Model
 {
+    use \App\Traits\BelongsToTenant;
+
     protected $table = "cat_pills";
 
 	//protected $fillable = ['name','price'];

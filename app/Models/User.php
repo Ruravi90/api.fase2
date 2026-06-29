@@ -9,6 +9,8 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
+    use \App\Traits\BelongsToTenant;
+
     use HasApiTokens, HasRoles, Notifiable;
 
     protected $guard_name = 'web';

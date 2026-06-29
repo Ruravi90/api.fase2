@@ -5,6 +5,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Creditor extends Model
 {
+    use \App\Traits\BelongsToTenant;
+
 	protected $table = "creditors";
 
 	//protected $fillable = ['name','last_name','mother_last_name','email'];

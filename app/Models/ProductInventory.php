@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProductInventory extends Model
 {
+    use \App\Traits\BelongsToTenant;
+
     protected $table = "products_inventory";
 
 	//protected $fillable = ['name','last_name','mother_last_name','email'];

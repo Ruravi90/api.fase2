@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class TurnQueue extends Model
 {
+    use \App\Traits\BelongsToTenant;
+
     use HasFactory;
 
     protected $fillable = [

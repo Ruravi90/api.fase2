@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class CatProduct extends Model
 {
+    use \App\Traits\BelongsToTenant;
+
 	protected $table = "cat_products";
 
 	protected $fillable = ['name'];

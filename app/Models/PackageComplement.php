@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class PackageComplement extends Model
 {
+    use \App\Traits\BelongsToTenant;
+
     protected $table = "complements_packages";
 
 	//protected $fillable = ['name','last_name','mother_last_name','email'];

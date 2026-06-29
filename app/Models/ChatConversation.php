@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class ChatConversation extends Model
 {
+    use \App\Traits\BelongsToTenant;
+
     protected $fillable = ['type', 'name', 'last_message', 'last_message_at'];
 
     public function messages()

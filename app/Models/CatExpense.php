@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class CatExpense extends Model
 {
+    use \App\Traits\BelongsToTenant;
+
      protected $table = "cat_expenses";
      protected $fillable = ['name'];
 

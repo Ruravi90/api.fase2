@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Purchase extends Model
 {
+    use \App\Traits\BelongsToTenant;
+
     protected $table = "purchases";
 
 	//protected $fillable = ['business_name','contact_name','office_phone','email'];

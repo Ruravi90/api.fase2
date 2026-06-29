@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Package extends Model
 {
+    use \App\Traits\BelongsToTenant;
+
     protected $table = "packages";
 
     protected $casts = [

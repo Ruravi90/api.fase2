@@ -5,6 +5,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class CatService extends Model
 {
+    use \App\Traits\BelongsToTenant;
+
 	protected $table = "cat_services";
 
 	//protected $fillable = ['name','last_name','mother_last_name','email'];

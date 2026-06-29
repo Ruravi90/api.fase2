@@ -4,6 +4,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class PillInventory extends Model
 {
+    use \App\Traits\BelongsToTenant;
+
 	protected $table = "pills_inventory";
 	//protected $fillable = ['pill_id','count'];
 

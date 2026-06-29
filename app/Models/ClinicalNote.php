@@ -10,6 +10,8 @@ use Spatie\Activitylog\LogOptions;
 
 class ClinicalNote extends Model
 {
+    use \App\Traits\BelongsToTenant;
+
     use HasFactory, LogsActivity;
 
     protected $fillable = [

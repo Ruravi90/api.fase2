@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Department extends Model
 {
+    use \App\Traits\BelongsToTenant;
+
     protected $table = "departments";
 
 

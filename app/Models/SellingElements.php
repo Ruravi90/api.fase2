@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class SellingElements extends Model
 {
+    use \App\Traits\BelongsToTenant;
+
     protected $table = "selling_elements";
 
 	//protected $fillable = ['name','price'];
