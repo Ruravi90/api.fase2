@@ -12,4 +12,9 @@ class Plan extends Model
     {
         return $this->belongsToMany(Feature::class)->withPivot('limit_value');
     }
+
+    public function promoCodes()
+    {
+        return $this->belongsToMany(PromoCode::class);
+    }
 }

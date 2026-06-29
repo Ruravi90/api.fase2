@@ -40,6 +40,8 @@ Route::get('/health', function () {
         'timestamp' => now()->toIso8601String()
     ]);
 });
+Route::get('/saas/available-plans', [\App\Http\Controllers\Saas\PlanController::class, 'index']);
+
 Route::middleware('guest')->group(function () {
     Route::post('/users/login', [UserController::class, 'apiLogin']);
     Route::post('/users/register', [UserController::class, 'apiRegister']);
@@ -49,28 +51,27 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/users/logout', [UserController::class, 'apiLogout']);
     Route::get('/users/me', [UserController::class, 'apiMe']);
-    Route::get('/queue/active', [QueueController::class, 'getActiveQueue']);
-    Route::post('/queue/advance', [QueueController::class, 'advanceTurn']);
-    Route::controller(ScheduleController::class)->group(function () {
-        Route::get('/schedules', 'getAll');
-        Route::get('/schedules/{id}', 'find');
-        Route::post('/schedules', 'add');
-        Route::post('/schedules/{id}/check-in', 'checkIn');
-        Route::put('/schedules/{id}', 'update');
-        Route::delete('/schedules/{id}', 'delete');
-    });
-
-    Route::controller(ClinicalNoteController::class)->group(function () {
-        Route::get('/clinical_notes/history/{clientId}', 'getHistory');
-        Route::post('/clinical_notes/draft', 'saveDraft');
-        Route::post('/clinical_notes/{id}/sign', 'signNote');
-    });
-
     // Rutas para Clínicas (Tenants) gestionando su suscripción SaaS
-    Route::get('/saas/available-plans', [\App\Http\Controllers\Saas\PlanController::class, 'index']);
     Route::post('/saas/payment/preference', [\App\Http\Controllers\Saas\MercadoPagoController::class, 'createPreference']);
+    Route::post('/saas/promo-codes/validate', [\App\Http\Controllers\Saas\PromoCodeController::class, 'validateCode']);
 
+    Route::middleware('check_subscription')->group(function () {
+        Route::get('/queue/active', [QueueController::class, 'getActiveQueue']);
+        Route::post('/queue/advance', [QueueController::class, 'advanceTurn']);
+        Route::controller(ScheduleController::class)->group(function () {
+            Route::get('/schedules', 'getAll');
+            Route::get('/schedules/{id}', 'find');
+            Route::post('/schedules', 'add');
+            Route::post('/schedules/{id}/check-in', 'checkIn');
+            Route::put('/schedules/{id}', 'update');
+            Route::delete('/schedules/{id}', 'delete');
+        });
 
+        Route::controller(ClinicalNoteController::class)->group(function () {
+            Route::get('/clinical_notes/history/{clientId}', 'getHistory');
+            Route::post('/clinical_notes/draft', 'saveDraft');
+            Route::post('/clinical_notes/{id}/sign', 'signNote');
+        });
     Route::controller(ClientController::class)->group(function () {
         Route::get('/clients', 'getAll');
         Route::get('/clients/{id}', 'find');
@@ -311,11 +312,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/openwa/sessions/{id}', 'destroy');
     });
 
-    Route::controller(\App\Http\Controllers\ChatController::class)->group(function () {
-        Route::get('/chat/conversations', 'index');
-        Route::get('/chat/conversations/{id}/messages', 'show');
-        Route::post('/chat/conversations/{id}/messages', 'store');
-    });
+        Route::controller(\App\Http\Controllers\ChatController::class)->group(function () {
+            Route::get('/chat/conversations', 'index');
+            Route::get('/chat/conversations/{id}/messages', 'show');
+            Route::post('/chat/conversations/{id}/messages', 'store');
+        });
+    }); // End check_subscription
 });
 
 Route::post('/saas/payment/webhook', [\App\Http\Controllers\Saas\MercadoPagoController::class, 'webhook']);
@@ -330,4 +332,5 @@ Route::middleware(['auth:sanctum', 'role:super_admin'])->prefix('saas')->group(f
     Route::post('tenants/{tenant}/assign-plan', [\App\Http\Controllers\Saas\TenantController::class, 'assignPlan']);
     Route::apiResource('plans', \App\Http\Controllers\Saas\PlanController::class);
     Route::apiResource('subscriptions', \App\Http\Controllers\Saas\SubscriptionController::class)->only(['index', 'show']);
+    Route::apiResource('promo-codes', \App\Http\Controllers\Saas\AdminPromoCodeController::class);
 });
