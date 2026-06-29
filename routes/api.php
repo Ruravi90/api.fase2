@@ -57,6 +57,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/saas/promo-codes/validate', [\App\Http\Controllers\Saas\PromoCodeController::class, 'validateCode']);
 
     Route::middleware('check_subscription')->group(function () {
+        Route::get('/init/schedule', [\App\Http\Controllers\InitController::class, 'getScheduleInit']);
+        Route::get('/init/sale', [\App\Http\Controllers\InitController::class, 'getSaleInit']);
+        Route::get('/init/dashboard', [\App\Http\Controllers\InitController::class, 'getDashboardInit']);
+
         Route::get('/queue/active', [QueueController::class, 'getActiveQueue']);
         Route::post('/queue/advance', [QueueController::class, 'advanceTurn']);
         Route::controller(ScheduleController::class)->group(function () {
