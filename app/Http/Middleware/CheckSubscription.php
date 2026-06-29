@@ -17,6 +17,13 @@ class CheckSubscription
     {
         $tenant = \Spatie\Multitenancy\Models\Tenant::current();
 
+        if (!$tenant && auth()->check() && auth()->user()->tenant_id) {
+            $tenant = \App\Models\Tenant::find(auth()->user()->tenant_id);
+            if ($tenant) {
+                $tenant->makeCurrent();
+            }
+        }
+
         if (!$tenant) {
             return response()->json(['message' => 'No tenant context found'], 403);
         }

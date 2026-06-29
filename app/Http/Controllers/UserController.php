@@ -125,7 +125,18 @@ class UserController extends Controller
             $user->loadMissing('roles');
         }
 
-        return $user->makeHidden(['password', 'remember_token'])->toArray();
+        $features = [];
+        if ($user->tenant_id) {
+            $tenant = \App\Models\Tenant::with('subscription.plan.features')->find($user->tenant_id);
+            if ($tenant && $tenant->subscription && $tenant->subscription->plan) {
+                $features = $tenant->subscription->plan->features->pluck('code')->toArray();
+            }
+        }
+
+        $payload = $user->makeHidden(['password', 'remember_token'])->toArray();
+        $payload['features'] = $features;
+
+        return $payload;
     }
 
     /**

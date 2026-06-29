@@ -25,7 +25,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'check_subscription' => \App\Http\Middleware\CheckSubscription::class,
         ]);
         $middleware->api(append: [
-            \Illuminate\Session\Middleware\AuthenticateSession::class,
+            // \Illuminate\Session\Middleware\AuthenticateSession::class, // Removed because it crashes with auth:sanctum RequestGuard
         ]);
         $middleware->web(append: [
             \Illuminate\Session\Middleware\AuthenticateSession::class,

@@ -42,8 +42,9 @@ Route::get('/health', function () {
 });
 Route::get('/saas/available-plans', [\App\Http\Controllers\Saas\PlanController::class, 'index']);
 
+Route::post('/users/login', [UserController::class, 'apiLogin']);
+
 Route::middleware('guest')->group(function () {
-    Route::post('/users/login', [UserController::class, 'apiLogin']);
     Route::post('/users/register', [UserController::class, 'apiRegister']);
     Route::post('/saas/register', [\App\Http\Controllers\Saas\TenantController::class, 'publicRegister']);
 });
